@@ -1,0 +1,5 @@
+github3.py==1.0.0a4
+pkg-resources==0.0.0
+requests==2.11.1
+uritemplate==3.0.0
+uritemplate.py==3.0.2

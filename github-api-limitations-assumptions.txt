@@ -1,0 +1,10 @@
+github only tracks statistics for who makes a commit to a project.
+
+Assumption: only code (er, and documentation...) contributions matter
+
+What about other types of contributors?
+ - Bug reporters who identify issues but don't submit the code to fix them?
+ - Code reviewers who point out issues in pull requests?
+ - Maintainers who merge PRs?
+ - Release managers who test and tag releases?
+ - Community managers (or reviewer suggestion bots!) that tag people to review pull requests? (Connectors)

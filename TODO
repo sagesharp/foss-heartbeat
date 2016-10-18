@@ -1,0 +1,31 @@
+1. GET ALL THE DATA!!!! (And document the date I pulled the data on)
+
+2. Find the project's bots.
+
+3. What was a user's first interaction with a project?
+   - open an issue
+   - comment on an issue
+   - open a PR
+   - comment on a PR
+
+   For each user, record their username, the issue ID, issue/pr/comment date, and what type of interaction it was.
+   Double check this against the list of people github says are contributors
+
+4. What roles have they achieved?
+   - Issue reporter (opened an issue that was closed)
+   - Issue responder (commented on an issue that was not their own)
+   - Code contributor (opened a PR that was merged)
+   - Documentation contributor (opened a PR including a doc file that was merged)
+   - Reviewer (commented on a PR that was not opened by them)
+   - Maintainer (merged another person's PR)
+   - Connector (tagged someone else that's not a bot, who commented)
+
+5. From their initial interaction with a project, how long did it take them to achieve that role?
+
+6. What length of time did they take that role on (first action to last action)?
+
+7. During their time in that role, was their average number of actions in that role per month?
+
+8. Are they active now in that role?
+
+(Note: 5,6,7,8 can be visualized with a dot chart)

@@ -1,0 +1,12 @@
+Open source license TBD.
+
+This repository uses several different open source libraries.
+
+Github API
+----------
+
+Information is pulled from github with the help of githubv3.py (Modified BSD license):
+
+https://github.com/sigmavirus24/github3.py
+
+pip install --pre github3.py
