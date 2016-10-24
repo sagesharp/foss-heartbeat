@@ -29,8 +29,8 @@ def getUserDate(json):
     if not json['user']:
         user = 'ghost'
     else:
-        user = soup['user']['login']
-    date = soup['created_at']
+        user = json['user']['login']
+    date = json['created_at']
     return user, date
 
 
