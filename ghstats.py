@@ -34,6 +34,23 @@ def getUserDate(json):
     return user, date
 
 
+def insertUser(users, dirPath, jsonFile):
+    """Helps create a dictionary of the user's first interactions with a project.
+    Given a json file describing an opened issue or PR, or a comment,
+    Insert user into the dictionary, but only overwrite the dict entry
+    if this interaction is older than the one stored."""
+
+    with open(os.path.join(dirPath, jsonFile)) as issueFile:
+        soup = json.load(issueFile)
+        key, date = getUserDate(soup)
+    if not key in users:
+        users[key] = (dirPath, jsonFile, date)
+    else:
+        stored = datetime.strptime(users[key][2], "%Y-%m-%dT%H:%M:%SZ")
+        new = datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")
+        if new < stored:
+            users[key] = (dirPath, jsonFile, date)
+
 def findUsers(repoPath):
     """Returns a dictionary of username keys, with values being issue ID,
     the file name of the issue comment/review comment/pull request ID,
@@ -44,18 +61,21 @@ def findUsers(repoPath):
             continue
         dirPath = os.path.join(repoPath, directory)
 
-        for jsonFile in os.listdir(dirPath):
-            with open(os.path.join(dirPath, jsonFile)) as issueFile:
-                soup = json.load(issueFile)
-                key, date = getUserDate(soup)
-            # Insert user in, but only if this interaction is older
-            if not key in users:
-                users[key] = (dirPath, jsonFile, date)
-            else:
-                stored = datetime.strptime(users[key][2], "%Y-%m-%dT%H:%M:%SZ")
-                new = datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")
-                if new < stored:
-                    users[key] = (dirPath, jsonFile, date)
+        dirList = os.listdir(dirPath)
+        prFile = None
+        # First, look whether this is an issue or a PR.
+        # If it's a PR, make sure to insert that into the list,
+        # because when a PR is opened, an issue is opened
+        # with the same timestamp, and it's racy
+        # which order listdir will return the file names in.
+        for jsonFile in dirList:
+            if jsonIsPullRequest(jsonFile):
+                insertUser(users, dirPath, jsonFile)
+                prFile = jsonFile
+
+        for jsonFile in dirList:
+            if prFile and prFile != jsonFile:
+                insertUser(users, dirPath, jsonFile)
     return users
 
 def main():
