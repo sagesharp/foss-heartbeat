@@ -74,7 +74,7 @@ def findUsers(repoPath):
                 prFile = jsonFile
 
         for jsonFile in dirList:
-            if prFile and prFile != jsonFile:
+            if not prFile or (prFile and prFile != jsonFile):
                 insertUser(users, dirPath, jsonFile)
     return users
 
@@ -87,9 +87,9 @@ def main():
     repoPath = os.path.join(args.owner, args.repository)
 
     users = findUsers(repoPath)
-    with open(os.path.join(repoPath, 'first-interactions.txt', 'w')) as interactionsFile:
+    with open(os.path.join(repoPath, 'first-interactions.txt'), 'w') as interactionsFile:
         for key, value in users.items():
-            interactionsFile.write(key + '\t' + value[0] + '\t' + value[1] + '\t' +  value[2])
+            interactionsFile.write(key + '\t' + value[0] + '\t' + value[1] + '\t' +  value[2] + '\n')
 
 if __name__ == "__main__":
     main()
