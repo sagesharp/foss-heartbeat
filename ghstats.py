@@ -19,6 +19,20 @@ import json
 import argparse
 from datetime import datetime
 
+# Github lesson 2:
+#
+# If a user is deleted, their comments remain, but their user info is removed.
+# On the github website, their user info will be linked to:
+# https://github.com/ghost
+# That means we can't differentiate between multiple deleted users.
+def getUserDate(json):
+    if not json['user']:
+        user = 'ghost'
+    else:
+        user = soup['user']['login']
+    date = soup['created_at']
+    return user, date
+
 
 def findUsers(repoPath):
     """Returns a dictionary of username keys, with values being issue ID,
@@ -33,17 +47,7 @@ def findUsers(repoPath):
         for jsonFile in os.listdir(dirPath):
             with open(os.path.join(dirPath, jsonFile)) as issueFile:
                 soup = json.load(issueFile)
-                # Github lesson 2:
-                #
-                # If a user is deleted, their comments remain, but their user info is removed.
-                # On the github website, their user info will be linked to:
-                # https://github.com/ghost
-                # That means we can't differentiate between multiple deleted users.
-                if not soup['user']:
-                    key = 'ghost'
-                else:
-                    key = soup['user']['login']
-                date = soup['created_at']
+                key, date = getUserDate(soup)
             # Insert user in, but only if this interaction is older
             if not key in users:
                 users[key] = (dirPath, jsonFile, date)
