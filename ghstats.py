@@ -87,8 +87,9 @@ def main():
     repoPath = os.path.join(args.owner, args.repository)
 
     users = findUsers(repoPath)
-    for key, value in users.items():
-        print(key, '\t', value[0], '\t', value[1], '\t',  value[2])
+    with open(os.path.join(repoPath, 'first-interactions.txt', 'w')) as interactionsFile:
+        for key, value in users.items():
+            interactionsFile.write(key + '\t' + value[0] + '\t' + value[1] + '\t' +  value[2])
 
 if __name__ == "__main__":
     main()
