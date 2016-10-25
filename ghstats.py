@@ -2,7 +2,7 @@
 #
 # Copyright 2016 Sarah Sharp <sharp@otter.technology>
 #
-# This program creates statistics from github issue data files in the format:
+# This program categorizes github interactions stored in the format:
 # 
 # .
 # |-- github owner
@@ -13,8 +13,56 @@
 #         |   |-- pr-<id>.json
 #         |   |-- pr-comment-<id>.json
 #
+#
+# The program writes the following files:
+#
+#  - first-interactions.txt
+#
+#    This contains a contributor's first interaction with the project.
+#    They could have opened an issue, commented on an issue,
+#    opened a pull request, or commented on a pull request.
+#
+#  - issue-reporters.txt
+#
+#    This file contains users who have opened an issue (not a pull request).
+#    Depending on what issues are used for, these people could be bug reporters,
+#    feature proposers, etc.
+#
+#  - issue-responders.txt
+#
+#    This file contains comments people added to issues that they didn't open.
+#    Depending on what issues are used for, this people could be triaging a bug,
+#    responding to a feature request or RFC, etc.
+#
+#  - submitters.txt
+#
+#    This file contains people who have opened a pull request that was not merged.
+#
+#  - contributors.txt
+#
+#    This file contains people who have opened a pull request that was merged.
+#
+#  - reviewers.txt
+#
+#    This file contains people who comment on pull requests (either as an issue comment
+#    or as a contribution review comment) on pull requests they didn't open.
+#
+#  - maintainers.txt
+#
+#    This file contains people who merge pull requests (which may be their own)
+#    Note that this file may contain bots who are merging in code on command.
+#    We attempt to find the user who issued the command and record them as a merger,
+#    in addition to the bot doing the merging.
+#
+# - connectors.txt
+#
+#   FIXME: add this.
+#   This file contains people who tag another person who comments on an issue or PR.
+#   These people are crucial for getting the right people to review a problem,
+#   especially issues opened by newcomers who don't know who to tag.
 
 import os
+import re
 import json
 import argparse
 from datetime import datetime
@@ -33,6 +81,139 @@ def getUserDate(json):
     date = json['created_at']
     return user, date
 
+
+# Track issue reporters
+# Make a note when someone opened an issue (not a PR)
+# 'issue reporter', date, username, path to issue json file
+def appendIssueReporters(issueDir, issueReporters):
+    """If an issue is not a pull request, append issue reporter information to the issueReporters list.
+    Return the username of the issue reporter, or None if this is a pull request."""
+    # Grab the json from the issue File
+    for jsonFile in os.listdir(issueDir):
+        if jsonFile.startswith('issue-'):
+            with open(os.path.join(issueDir, jsonFile)) as issueFile:
+                issueJson = json.load(issueFile)
+                break
+    if json['pull_request']:
+        return None
+    user, date = getUserDate(issueJson)
+    issueReporters.append(('issue reporter', date, user, os.path.join(issueDir, jsonFile)))
+    return user
+
+# Track issue responders
+# Make a note when someone responded on an issue (not a PR) that is not their own
+# 'issue responder', date, username, path to issue comment json file
+def appendIssueResponders(issueDir, issueResponders, issueCreator):
+    for jsonFile in os.listdir(issueDir):
+        if not jsonFile.startswith('comment-'):
+            continue
+        with open(os.path.join(issueDir, jsonFile)) as commentFile:
+            commentJson = json.load(commentFile)
+        user, date = getUserDate(commentJson)
+        if user == issueCreator:
+            continue
+        issueResponders.append(('issue responder', date, user, os.path.join(issueDir, jsonFile)))
+
+# FIXME: ugh, we could avoid pattern matching if we renamed pr-comment to review-comment
+def jsonIsPullRequest(filename):
+    return re.match(r'pr-[0-9]+', filename)
+
+# Track contributors with a merged pull request,
+# submitters who opened a pull request that wasn't merged,
+# and the mergers (people who merged those pull requests).
+#
+# Make a note when someone opened a PR
+# 'contributor', date, username, issue id
+#
+# Look in the pr-.json files. If it was merged, merged = true
+# If it was merged, the person is a contributor,
+# if they didn't get their code merged, they are a submitter.
+# 'submitter', date, username, issue id
+#
+# Can look for merged_by to get the user who merged it
+# Not sure what happens when a 'ghost' has merged in a file
+# 'merger', date, username, path to issue json file
+def appendContributor(issueDir, contributors, mergers, submitters):
+    """If an issue is a pull request, append issue reporter information to the issueReporters list.
+    Return the username of the issue reporter, or None if this is a pull request."""
+    # Grab the json from the pull request file
+    for jsonFile in os.listdir(issueDir):
+        if jsonIsPullRequest(jsonFile):
+            with open(os.path.join(issueDir, jsonFile)) as prFile:
+                prJson = json.load(prFile)
+                break
+    if not json['pull_request']:
+        return None
+    user, date = getUserDate(prJson)
+    merged_at = json['merged_at']
+    merger = json['merged_by']
+    if merged_at:
+        contributors.append(('contributor', date, user, os.path.join(issueDir, jsonFile)))
+        mergers.append(('merger', merged_at, merger, os.path.join(issueDir, jsonFile)))
+    else:
+        submitters.append(('submitter', date, user, os.path.join(issueDir, jsonFile)))
+    return user
+
+def checkForBotCommand(json, commandList):
+    """If this was a command sent to a bot, return
+    the username of the person who issued the command
+    and the date of the command."""
+    if not json['body_text']:
+        return None
+    for command in commandList:
+        # FIXME: bot may check for commands in the middle of a comment?
+        if json['body_text'].startswith(command):
+            user, date = getUserDate(json)
+            return user, date
+    return None, None
+
+# Track pull request reviewers, who may make an issue comment, or a PR review comment.
+# 'issue responder', date, username, path to issue comment json file
+# If someone tagged a bot in order for that bot to merge the code in, add them as a merger.
+# 'merger', date, username, path to issue comment json file
+def appendReviewers(issueDir, contributor, reviewers, mergers):
+    for jsonFile in os.listdir(issueDir):
+        if not jsonFile.startswith('comment-') and not jsonFile.startswith('pr-comment-'):
+            continue
+        with open(os.path.join(issueDir, jsonFile)) as commentFile:
+            commentJson = json.load(commentFile)
+        user, date = getUserDate(commentJson)
+        merger, mergeDate = checkForBotCommand(commentJson, ['@bors: r+'])
+        if merger and mergeDate:
+            mergers.append(('merger', mergeDate, merger, os.path.join(issueDir, jsonFile)))
+        if user == contributor:
+            continue
+        reviewers.append(('reviewer', date, user, os.path.join(issueDir, jsonFile)))
+
+
+# 'issue reporter', date, username, issue id
+# 'issue responder', date, username, issue id
+# 'contributor', date, username, issue id
+# 'reviewer', date, username, issue id
+def createStats(repoPath):
+    issueReporters = []
+    issueResponders = []
+    contributors = []
+    submitters = []
+    reviewers = []
+    mergers = []
+
+    processed = 0
+    for directory in os.listdir(repoPath):
+        if not directory.startswith('issue-'):
+            continue
+        dirPath = os.path.join(repoPath, directory)
+        issueCreator = appendIssueReporters(dirPath, issueReporters)
+        if issueCreator:
+            appendIssueResponders(dirPath, issueResponders, issueCreator)
+        else:
+            prCreator = appendContributor(dirPath, contributors, mergers, submitters)
+            if prCreator:
+                appendReviewers(dirPath, contributor, reviewers, mergers)
+        processed += 1
+        if (processed % 1000) == 0:
+            print('Processed', processed, 'issues')
+    return issueReporters, issueResponders, contributors, submitters, reviewers, mergers
 
 def insertUser(users, dirPath, jsonFile):
     """Helps create a dictionary of the user's first interactions with a project.
@@ -90,6 +271,15 @@ def main():
     with open(os.path.join(repoPath, 'first-interactions.txt'), 'w') as interactionsFile:
         for key, value in users.items():
             interactionsFile.write(key + '\t' + value[0] + '\t' + value[1] + '\t' +  value[2] + '\n')
+
+    #issueReporters = findIssueReporters(repoPath)
+    #issueReporters, issueResponders, contributors, submitters, reviewers, mergers = createStats(repoPath)
+    #with open(os.path.join(repoPath, 'first-interactions.txt', 'w') as interactionsFile:
+    #    for key, value in users.items():
+    #        interactionsFile.write(key + '\t' + value[0] + '\t' + value[1] + '\t' +  value[2])
+    #for quartet in issueReporters.items():
+    #    print(quartet[0], '\t', quartet[1], '\t', quartet[2], '\t',  quartet[3])
+
 
 if __name__ == "__main__":
     main()
