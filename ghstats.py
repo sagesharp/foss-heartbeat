@@ -17,37 +17,46 @@
 # The program writes the following files:
 #
 #  - first-interactions.txt
+#    username, issue ID, file name of the issue comment/review comment/pull request ID,
+#    and date of first interaction with the project
 #
 #    This contains a contributor's first interaction with the project.
 #    They could have opened an issue, commented on an issue,
 #    opened a pull request, or commented on a pull request.
 #
-#  - issue-reporters.txt
+#  - reporters.txt
+#    'reporter', date, username, path to issue json file
 #
 #    This file contains users who have opened an issue (not a pull request).
 #    Depending on what issues are used for, these people could be bug reporters,
 #    feature proposers, etc.
 #
-#  - issue-responders.txt
+#  - responders.txt
+#   'responder', date, username, path to issue comment json file
 #
 #    This file contains comments people added to issues that they didn't open.
 #    Depending on what issues are used for, this people could be triaging a bug,
 #    responding to a feature request or RFC, etc.
 #
 #  - submitters.txt
+#    'submitter', date, username, path to pull request json file
 #
 #    This file contains people who have opened a pull request that was not merged.
 #
 #  - contributors.txt
+#    'contributor', date, username, path to pull request json file
 #
 #    This file contains people who have opened a pull request that was merged.
 #
 #  - reviewers.txt
+#   'reviewer', date, username, path to pull request or issue comment json file
 #
 #    This file contains people who comment on pull requests (either as an issue comment
 #    or as a contribution review comment) on pull requests they didn't open.
 #
-#  - maintainers.txt
+#  - mergers.txt
+#    'merger', date, username, path to issue comment json file that contains a
+#    bot command or path to pull request json file that was merged
 #
 #    This file contains people who merge pull requests (which may be their own)
 #    Note that this file may contain bots who are merging in code on command.
@@ -81,10 +90,8 @@ def getUserDate(json):
     date = json['created_at']
     return user, date
 
-
 # Track issue reporters
 # Make a note when someone opened an issue (not a PR)
-# 'issue reporter', date, username, path to issue json file
 def appendIssueReporters(issueDir, issueReporters):
     """If an issue is not a pull request, append issue reporter information to the issueReporters list.
     Return the username of the issue reporter, or None if this is a pull request."""
@@ -97,12 +104,11 @@ def appendIssueReporters(issueDir, issueReporters):
     if json['pull_request']:
         return None
     user, date = getUserDate(issueJson)
-    issueReporters.append(('issue reporter', date, user, os.path.join(issueDir, jsonFile)))
+    issueReporters.append(('reporter', date, user, os.path.join(issueDir, jsonFile)))
     return user
 
 # Track issue responders
 # Make a note when someone responded on an issue (not a PR) that is not their own
-# 'issue responder', date, username, path to issue comment json file
 def appendIssueResponders(issueDir, issueResponders, issueCreator):
     for jsonFile in os.listdir(issueDir):
         if not jsonFile.startswith('comment-'):
@@ -112,7 +118,7 @@ def appendIssueResponders(issueDir, issueResponders, issueCreator):
         user, date = getUserDate(commentJson)
         if user == issueCreator:
             continue
-        issueResponders.append(('issue responder', date, user, os.path.join(issueDir, jsonFile)))
+        issueResponders.append(('responder', date, user, os.path.join(issueDir, jsonFile)))
 
 # FIXME: ugh, we could avoid pattern matching if we renamed pr-comment to review-comment
 def jsonIsPullRequest(filename):
@@ -123,16 +129,13 @@ def jsonIsPullRequest(filename):
 # and the mergers (people who merged those pull requests).
 #
 # Make a note when someone opened a PR
-# 'contributor', date, username, issue id
 #
 # Look in the pr-.json files. If it was merged, merged = true
 # If it was merged, the person is a contributor,
 # if they didn't get their code merged, they are a submitter.
-# 'submitter', date, username, issue id
 #
 # Can look for merged_by to get the user who merged it
 # Not sure what happens when a 'ghost' has merged in a file
-# 'merger', date, username, path to issue json file
 def appendContributor(issueDir, contributors, mergers, submitters):
     """If an issue is a pull request, append issue reporter information to the issueReporters list.
     Return the username of the issue reporter, or None if this is a pull request."""
@@ -168,9 +171,7 @@ def checkForBotCommand(json, commandList):
     return None, None
 
 # Track pull request reviewers, who may make an issue comment, or a PR review comment.
-# 'issue responder', date, username, path to issue comment json file
 # If someone tagged a bot in order for that bot to merge the code in, add them as a merger.
-# 'merger', date, username, path to issue comment json file
 def appendReviewers(issueDir, contributor, reviewers, mergers):
     for jsonFile in os.listdir(issueDir):
         if not jsonFile.startswith('comment-') and not jsonFile.startswith('pr-comment-'):
@@ -185,11 +186,6 @@ def appendReviewers(issueDir, contributor, reviewers, mergers):
             continue
         reviewers.append(('reviewer', date, user, os.path.join(issueDir, jsonFile)))
 
-
-# 'issue reporter', date, username, issue id
-# 'issue responder', date, username, issue id
-# 'contributor', date, username, issue id
-# 'reviewer', date, username, issue id
 def createStats(repoPath):
     issueReporters = []
     issueResponders = []
