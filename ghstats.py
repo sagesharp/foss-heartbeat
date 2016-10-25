@@ -149,8 +149,8 @@ def appendContributor(issueDir, contributors, mergers, submitters):
     if not prJson:
         return None
     user, date = getUserDate(prJson)
-    merged_at = json['merged_at']
-    merger = json['merged_by']
+    merged_at = prJson['merged_at']
+    merger = prJson['merged_by']
     if merged_at:
         contributors.append(('contributor', date, user, os.path.join(issueDir, jsonFile)))
         mergers.append(('merger', merged_at, merger, os.path.join(issueDir, jsonFile)))
@@ -206,7 +206,7 @@ def createStats(repoPath):
         else:
             prCreator = appendContributor(dirPath, contributors, mergers, submitters)
             if prCreator:
-                appendReviewers(dirPath, contributor, reviewers, mergers)
+                appendReviewers(dirPath, contributors, reviewers, mergers)
         processed += 1
         if (processed % 1000) == 0:
             print('Processed', processed, 'issues')
