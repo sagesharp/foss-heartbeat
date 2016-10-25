@@ -2,6 +2,15 @@ X. GET ALL THE DATA!!!! (And document the date I pulled the data on)
 
 2. Find the project's bots.
 
+   Rust has a couple bots:
+    - bors is a test and merge bot.
+      https://github.com/graydon/bors
+      Someone can approve a PR by commenting '@bors r+'
+      They can also roll up a PR into a daily(?) batch of commits
+    - rust-highfive
+      suggest reviewers based on which files are touched
+      https://github.com/nrc/highfive
+
 X. What was a user's first interaction with a project?
    - open an issue
    - comment on an issue
