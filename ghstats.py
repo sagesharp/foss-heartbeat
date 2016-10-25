@@ -148,6 +148,7 @@ def appendContributor(issueDir, contributors, mergers, submitters):
                 break
     if not prJson:
         return None
+
     user, date = getUserDate(prJson)
     merged_at = prJson['merged_at']
     merger = prJson['merged_by']
@@ -193,8 +194,8 @@ def appendReviewers(issueDir, contributor, reviewers, mergers):
 def createStats(repoPath):
     issueReporters = []
     issueResponders = []
-    contributors = []
     submitters = []
+    contributors = []
     reviewers = []
     mergers = []
 
