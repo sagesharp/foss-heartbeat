@@ -101,7 +101,7 @@ def appendIssueReporters(issueDir, issueReporters):
             with open(os.path.join(issueDir, jsonFile)) as issueFile:
                 issueJson = json.load(issueFile)
                 break
-    if json['pull_request']:
+    if 'pull_request' in issueJson:
         return None
     user, date = getUserDate(issueJson)
     issueReporters.append(('reporter', date, user, os.path.join(issueDir, jsonFile)))
@@ -161,7 +161,7 @@ def checkForBotCommand(json, commandList):
     """If this was a command sent to a bot, return
     the username of the person who issued the command
     and the date of the command."""
-    if not json['body_text']:
+    if not 'body_text' in json:
         return None
     for command in commandList:
         # FIXME: bot may check for commands in the middle of a comment?
