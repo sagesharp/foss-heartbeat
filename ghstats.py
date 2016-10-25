@@ -153,7 +153,10 @@ def appendContributor(issueDir, contributors, mergers, submitters):
     merger = prJson['merged_by']
     if merged_at:
         contributors.append(('contributor', date, user, os.path.join(issueDir, jsonFile)))
-        mergers.append(('merger', merged_at, merger, os.path.join(issueDir, jsonFile)))
+        if not merger:
+            mergers.append(('merger', merged_at, 'ghost', os.path.join(issueDir, jsonFile)))
+        else:
+            mergers.append(('merger', merged_at, merger['login'], os.path.join(issueDir, jsonFile)))
     else:
         submitters.append(('submitter', date, user, os.path.join(issueDir, jsonFile)))
     return user
