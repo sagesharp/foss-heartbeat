@@ -14,8 +14,8 @@ X. What was a user's first interaction with a project?
 4. What roles have they achieved?
    - Issue reporter (opened an issue that was closed)
    - Issue responder (commented on an issue that was not their own)
-   - Code contributor (opened a PR that was merged)
-   - Documentation contributor (opened a PR including a doc file that was merged)
+   - Contributor (opened a PR that was merged)
+   - Submitter (opened a PR that was NOT merged)
    - Reviewer (commented on a PR that was not opened by them)
    - Maintainer (merged another person's PR)
    - Connector (tagged someone else that's not a bot, who commented)
@@ -29,3 +29,8 @@ X. What was a user's first interaction with a project?
 8. Are they active now in that role?
 
 (Note: 5,6,7,8 can be visualized with a dot chart)
+
+
+Roles to look at later:
+   - Documentation vs code contributor (opened a PR including a doc file that was merged)
+     This is too much data to look at, since it would involve queries into the files touched for the pull request.
