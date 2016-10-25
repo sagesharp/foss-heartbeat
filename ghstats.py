@@ -140,12 +140,13 @@ def appendContributor(issueDir, contributors, mergers, submitters):
     """If an issue is a pull request, append issue reporter information to the issueReporters list.
     Return the username of the issue reporter, or None if this is a pull request."""
     # Grab the json from the pull request file
+    prJson = None
     for jsonFile in os.listdir(issueDir):
         if jsonIsPullRequest(jsonFile):
             with open(os.path.join(issueDir, jsonFile)) as prFile:
                 prJson = json.load(prFile)
                 break
-    if not json['pull_request']:
+    if not prJson:
         return None
     user, date = getUserDate(prJson)
     merged_at = json['merged_at']
