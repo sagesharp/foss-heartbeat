@@ -213,7 +213,13 @@ def createStats(repoPath):
         processed += 1
         if (processed % 1000) == 0:
             print('Processed', processed, 'issues')
-    return issueReporters, issueResponders, contributors, submitters, reviewers, mergers
+    statsList = [(issueReporters, 'reporters.txt'),
+                 (issueResponders, 'responders.txt'),
+                 (submitters, 'submitters.txt'),
+                 (contributors, 'contributors.txt'),
+                 (reviewers, 'reviewers.txt'),
+                 (mergers, 'mergers.txt')]
+    return statsList
 
 def insertUser(users, dirPath, jsonFile):
     """Helps create a dictionary of the user's first interactions with a project.
@@ -272,14 +278,14 @@ def main():
         for key, value in users.items():
             interactionsFile.write(key + '\t' + value[0] + '\t' + value[1] + '\t' +  value[2] + '\n')
 
-    #issueReporters = findIssueReporters(repoPath)
-    #issueReporters, issueResponders, contributors, submitters, reviewers, mergers = createStats(repoPath)
-    #with open(os.path.join(repoPath, 'first-interactions.txt', 'w') as interactionsFile:
-    #    for key, value in users.items():
-    #        interactionsFile.write(key + '\t' + value[0] + '\t' + value[1] + '\t' +  value[2])
-    #for quartet in issueReporters.items():
-    #    print(quartet[0], '\t', quartet[1], '\t', quartet[2], '\t',  quartet[3])
-
+    statsList = createStats(repoPath)
+    for stats in statsList:
+        with open(os.path.join(repoPath, stats[1]), 'w') as statsFile:
+            print('Writing', stats[1])
+            for line in stats[0]:
+                for item in line:
+                    statsFile.write(item + '\t')
+                statsFile.write('\n')
 
 if __name__ == "__main__":
     main()
