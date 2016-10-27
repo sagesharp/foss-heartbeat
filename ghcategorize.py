@@ -267,7 +267,7 @@ def findUsers(repoPath):
     return users
 
 def main():
-    parser = argparse.ArgumentParser(description='Gather statistics from scraped github information.')
+    parser = argparse.ArgumentParser(description='Categorize interactions with scraped github data.')
     parser.add_argument('repository', help='github repository name')
     parser.add_argument('owner', help='github username of repository owner')
     args = parser.parse_args()
