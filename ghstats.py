@@ -77,13 +77,17 @@ def graphRampTime(repoPath):
 
     # Now graph it!
     data = [Histogram(x=deltaResponse)]
-    fig = Figure(data=data)
+    layout = Layout(
+        title='Bug triaging ramp up time for newcomers to<br>' + repoPath,
+        yaxis=dict(title='Number of contributors'),
+        xaxis=dict(title='<br>Number of days before a contributor comments on an issue opened by another person' +
+                   '<br>Mean: ' + '{:.2f}'.format(statistics.mean(deltaResponse)) + ' days' +
+                   '<br>Median: ' + '{:.2f}'.format(statistics.median(deltaResponse)) + ' days' +
+                   '<br>Percentage of contributors who never did this: ' +
+                   '{:.2f}'.format(len(noResponse)/(len(deltaResponse)+len(noResponse))*100) + '%')
+    )
+    fig = Figure(data=data, layout=layout)
     offline.plot(fig, filename=os.path.join(repoPath, 'responders-rampup.html'), auto_open=False)
-    # We can do subplots to show how many users have and haven't participated in that role
-    # We can do subplots to show how many users have and haven't participated in that role
-    print('Mean:', statistics.mean(deltaResponse), 'days')
-    print('Median:', statistics.median(deltaResponse), 'days')
-    print('Standard deviation:', statistics.pstdev(deltaResponse))
 
 # Make a better contribution graph for a project over time
 def main():
