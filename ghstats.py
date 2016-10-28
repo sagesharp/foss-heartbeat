@@ -71,10 +71,7 @@ def graphRampTime(repoPath):
         if responseDates:
             nextDate = datetime.strptime(responseDates[0], "%Y-%m-%dT%H:%M:%SZ")
             delta = nextDate - startDate
-            if delta == timedelta():
-                firstResponse.append(user)
-            else:
-                deltaResponse.append(delta.days)
+            deltaResponse.append(delta.days)
         else:
             noResponse.append(user)
 
