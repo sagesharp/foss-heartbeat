@@ -70,6 +70,10 @@ def getRampTime(newcomers, contributorData, contributionType):
             continue
         nextDate = contributionDates[user][0]
         delta = nextDate - startDate
+        if delta.days < 0:
+            print('Negative delta for user', user, 'for', contributionType, 'on', nextDate)
+            print('first contribution was on', startDate, 'file', os.path.join(lineSplit[1], lineSplit[2]))
+            continue
         deltaContribution.append(delta.days)
 
     return deltaContribution, noContribution
