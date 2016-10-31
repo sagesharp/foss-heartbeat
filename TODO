@@ -43,3 +43,9 @@ X. What was a user's first interaction with a project?
 Roles to look at later:
    - Documentation vs code contributor (opened a PR including a doc file that was merged)
      This is too much data to look at, since it would involve queries into the files touched for the pull request.
+
+
+Questions I want to answer for newcomers looking for a project:
+
+On average, X percent of $PROJECT contributors are $ROLE, and it takes them Y number of days to ramp up.
+On average, X percent of $PROJECT members open pull requests, and it takes them Y number of days and Z number of review comments to get them merged.
