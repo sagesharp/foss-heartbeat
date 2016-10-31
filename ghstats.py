@@ -74,6 +74,20 @@ def getRampTime(newcomers, contributorData, contributionType):
 
     return deltaContribution, noContribution
 
+def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
+    data = [Histogram(x=deltas)]
+    layout = Layout(
+        title=graphtitle,
+        yaxis=dict(title='Number of contributors'),
+        xaxis=dict(title= xtitle +
+                   '<br>Mean: ' + '{:.2f}'.format(statistics.mean(deltas)) + ' days' +
+                   '<br>Median: ' + '{:.2f}'.format(statistics.median(deltas)) + ' days' +
+                   '<br>Percentage of contributors who never did this: ' +
+                   '{:.2f}'.format(len(nocontribs)/(len(deltas)+len(nocontribs))*100) + '%')
+    )
+    fig = Figure(data=data, layout=layout)
+    offline.plot(fig, filename=filename, auto_open=False)
+
 # For people considering getting involved in an open source community,
 # they may want to know how long it will take to integrate into the community.
 # (Note: this ignores time spent in forums/IRC/slack/jabber etc)
@@ -90,7 +104,7 @@ def getRampTime(newcomers, contributorData, contributionType):
 # Hint: read file into memory with .read() and then use re.findall(pattern, file contents)
 # A box plot would be good to show median, quartiles, max/min, and perhaps the underlying data?
 # https://plot.ly/python/box-plots/
-def graphRampTime(repoPath):
+def createRampTimeGraphs(repoPath):
     with open(os.path.join(repoPath, 'responders.txt')) as respondersFile:
         responders = respondersFile.read()
     # No clue why readline is returning single characters, so let's do it this way:
@@ -98,19 +112,10 @@ def graphRampTime(repoPath):
         newcomers = newcomersFile.read().split('\n')
 
     deltaResponse, noResponse = getRampTime(newcomers, responders, 'responder')
-    # Now graph it!
-    data = [Histogram(x=deltaResponse)]
-    layout = Layout(
-        title='Bug triaging ramp up time for newcomers to<br>' + repoPath,
-        yaxis=dict(title='Number of contributors'),
-        xaxis=dict(title='<br>Number of days before a contributor comments on an issue opened by another person' +
-                   '<br>Mean: ' + '{:.2f}'.format(statistics.mean(deltaResponse)) + ' days' +
-                   '<br>Median: ' + '{:.2f}'.format(statistics.median(deltaResponse)) + ' days' +
-                   '<br>Percentage of contributors who never did this: ' +
-                   '{:.2f}'.format(len(noResponse)/(len(deltaResponse)+len(noResponse))*100) + '%')
-    )
-    fig = Figure(data=data, layout=layout)
-    offline.plot(fig, filename=os.path.join(repoPath, 'responders-rampup.html'), auto_open=False)
+    graphRampTime(deltaResponse, noResponse,
+                  'Bug triaging ramp up time for newcomers to<br>' + repoPath,
+                  '<br>Number of days before a contributor comments on an issue opened by another person',
+                  os.path.join(repoPath, 'responders-rampup.html'))
 
 # Make a better contribution graph for a project over time
 def main():
@@ -119,7 +124,7 @@ def main():
     parser.add_argument('owner', help='github username of repository owner')
     args = parser.parse_args()
     repoPath = os.path.join(args.owner, args.repository)
-    graphRampTime(repoPath)
+    createRampTimeGraphs(repoPath)
 
 if __name__ == "__main__":
     main()
