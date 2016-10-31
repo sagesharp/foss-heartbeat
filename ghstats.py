@@ -31,6 +31,49 @@ from datetime import datetime, timedelta
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot, offline
 from plotly.graph_objs import *
 
+def sortContributors(data):
+    """Returns a dictionary with username as the key to return a list of contributions,
+    sorted in order by date."""
+    dates = {}
+    for line in data.split('\n'):
+        lineSplit = line.split('\t')
+        if len(lineSplit) < 4:
+            continue
+        user = lineSplit[2]
+        startDate = datetime.strptime(lineSplit[1], "%Y-%m-%dT%H:%M:%SZ")
+        if user in dates:
+            dates[user].append(startDate)
+        else:
+            dates[user] = [startDate]
+    for user, date in dates.items():
+        dates[user].sort()
+    return dates
+
+def getRampTime(newcomers, contributorData, contributionType):
+    deltaContribution = []
+    noContribution = []
+    contributionDates = sortContributors(contributorData)
+
+    for line in newcomers:
+        lineSplit = line.split('\t')
+        # FIXME: for some reason there's some blank lines in our data
+        if len(lineSplit) < 4:
+            continue
+        user = lineSplit[0]
+        startDate = datetime.strptime(lineSplit[3], "%Y-%m-%dT%H:%M:%SZ")
+        # Find the time it took for a user to start contributing
+        # in a particular way from the date of their first interaction
+        # with the project. Note their first interaction could be this
+        # contribution type.
+        if not user in contributionDates:
+            noContribution.append(user)
+            continue
+        nextDate = contributionDates[user][0]
+        delta = nextDate - startDate
+        deltaContribution.append(delta.days)
+
+    return deltaContribution, noContribution
+
 # For people considering getting involved in an open source community,
 # they may want to know how long it will take to integrate into the community.
 # (Note: this ignores time spent in forums/IRC/slack/jabber etc)
@@ -54,27 +97,7 @@ def graphRampTime(repoPath):
     with open(os.path.join(repoPath, 'first-interactions.txt')) as newcomersFile:
         newcomers = newcomersFile.read().split('\n')
 
-    deltaResponse = []
-    noResponse = []
-    firstResponse = []
-    for line in newcomers:
-        # FIXME: for some reason there's some blank lines in responders.txt?
-        if len(line.split('\t')) < 4:
-            continue
-        user = line.split('\t')[0]
-        startDate = datetime.strptime(line.split('\t')[3], "%Y-%m-%dT%H:%M:%SZ")
-        # Find the time it took for a user to start
-        # commenting on an issue someone else opened.
-        pattern = re.compile(r'^responder\t(.*)\t%s\t.*\n' % user, re.MULTILINE)
-        responseDates = re.findall(pattern, responders)
-        responseDates.sort()
-        if responseDates:
-            nextDate = datetime.strptime(responseDates[0], "%Y-%m-%dT%H:%M:%SZ")
-            delta = nextDate - startDate
-            deltaResponse.append(delta.days)
-        else:
-            noResponse.append(user)
-
+    deltaResponse, noResponse = getRampTime(newcomers, responders, 'responder')
     # Now graph it!
     data = [Histogram(x=deltaResponse)]
     layout = Layout(
