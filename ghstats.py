@@ -112,6 +112,9 @@ def createRampTimeGraphs(repoPath):
         newcomers = newcomersFile.read().split('\n')
 
     info = [('responder', 'Bug triaging', 'a contributor comments on an issue opened by another person'),
+            ('merger', 'Merger', 'a contributor merges a pull request'),
+            ('reporter', 'Issue reporter', 'a contributor opens an issue'),
+            ('reviewer', 'Pull request reviewer', 'a contributor comments on a pull request opened by another person'),
            ]
 
     for i in info:
