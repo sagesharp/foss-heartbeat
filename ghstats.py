@@ -105,17 +105,22 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
 # A box plot would be good to show median, quartiles, max/min, and perhaps the underlying data?
 # https://plot.ly/python/box-plots/
 def createRampTimeGraphs(repoPath):
-    with open(os.path.join(repoPath, 'responders.txt')) as respondersFile:
-        responders = respondersFile.read()
     # No clue why readline is returning single characters, so let's do it this way:
     with open(os.path.join(repoPath, 'first-interactions.txt')) as newcomersFile:
         newcomers = newcomersFile.read().split('\n')
 
-    deltaResponse, noResponse = getRampTime(newcomers, responders, 'responder')
-    graphRampTime(deltaResponse, noResponse,
-                  'Bug triaging ramp up time for newcomers to<br>' + repoPath,
-                  '<br>Number of days before a contributor comments on an issue opened by another person',
-                  os.path.join(repoPath, 'responders-rampup.html'))
+    info = [('responder', 'Bug triaging', 'a contributor comments on an issue opened by another person'),
+           ]
+
+    for i in info:
+        with open(os.path.join(repoPath, i[0] + 's.txt')) as f:
+            contributors = f.read()
+        deltaResponse, noResponse = getRampTime(newcomers, contributors, i[0])
+        graphRampTime(deltaResponse, noResponse,
+                      '%s ramp up time for newcomers to<br>' % i[1] + repoPath,
+                      '<br>Number of days before %s' % i[2],
+                      os.path.join(repoPath, i[0] + 's-rampup.html'))
+
 
 # Make a better contribution graph for a project over time
 def main():
