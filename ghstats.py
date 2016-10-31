@@ -80,10 +80,12 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
         title=graphtitle,
         yaxis=dict(title='Number of contributors'),
         xaxis=dict(title= xtitle +
-                   '<br>Mean: ' + '{:.2f}'.format(statistics.mean(deltas)) + ' days' +
-                   '<br>Median: ' + '{:.2f}'.format(statistics.median(deltas)) + ' days' +
-                   '<br>Percentage of contributors who never did this: ' +
-                   '{:.2f}'.format(len(nocontribs)/(len(deltas)+len(nocontribs))*100) + '%')
+                   '<br>Mean: ' + '{:.2f}'.format(statistics.mean(deltas)) + ' days, ' +
+                   'Median: ' + '{:.2f}'.format(statistics.median(deltas)) + ' days' +
+                   '<br>Number of contributors who did this: ' +
+                   '{:,g}'.format(len(deltas)) +
+                   '<br>Percentage of contributors who did this: ' +
+                   '{:.2f}'.format(len(deltas)/(len(deltas)+len(nocontribs))*100) + '%')
     )
     fig = Figure(data=data, layout=layout)
     offline.plot(fig, filename=filename, auto_open=False)
