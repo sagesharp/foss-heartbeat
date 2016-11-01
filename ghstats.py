@@ -49,10 +49,9 @@ def sortContributors(data):
         dates[user].sort()
     return dates
 
-def getRampTime(newcomers, contributorData, contributionType):
+def getRampTime(newcomers, contributionDates, contributionType):
     deltaContribution = []
     noContribution = []
-    contributionDates = sortContributors(contributorData)
 
     for line in newcomers:
         lineSplit = line.split('\t')
@@ -94,6 +93,36 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
     fig = Figure(data=data, layout=layout)
     offline.plot(fig, filename=filename, auto_open=False)
 
+def graphFrequency(data, graphtitle, xtitle, filename):
+    data = [Scatter(x=[coord[0] for coord in data],
+                    y=[coord[1] for coord in data],
+                    mode = 'markers',
+                   text=[coord[2] for coord in data])]
+    layout = Layout(
+        title=graphtitle,
+        yaxis=dict(title='Number of contributions'),
+        xaxis=dict(title= xtitle),
+    )
+    fig = Figure(data=data, layout=layout)
+    offline.plot(fig, filename=filename, auto_open=False)
+
+# Given a dictionary that contains lists of contribution dates,
+# find number of weeks involved as X role and
+# number of contributions in that role
+def getFrequency(contributorDates):
+    data = []
+    nodata = 0
+    for user, d in contributorDates.items():
+        if len(d) < 2:
+            nodata = nodata + 1
+        else:
+            length = (d[-1] - d[0]).days / 7.
+            #if length != 0:
+            #contribsPerWeek = len(d) / length
+            contribs = len(d)
+            data.append((length, contribs, user))
+    return data, nodata
+
 # For people considering getting involved in an open source community,
 # they may want to know how long it will take to integrate into the community.
 # (Note: this ignores time spent in forums/IRC/slack/jabber etc)
@@ -110,25 +139,31 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
 # Hint: read file into memory with .read() and then use re.findall(pattern, file contents)
 # A box plot would be good to show median, quartiles, max/min, and perhaps the underlying data?
 # https://plot.ly/python/box-plots/
-def createRampTimeGraphs(repoPath):
+def createGraphs(repoPath):
     # No clue why readline is returning single characters, so let's do it this way:
     with open(os.path.join(repoPath, 'first-interactions.txt')) as newcomersFile:
         newcomers = newcomersFile.read().split('\n')
 
-    info = [('responder', 'Bug triaging', 'a contributor comments on an issue opened by another person'),
-            ('merger', 'Merger', 'a contributor merges a pull request'),
-            ('reporter', 'Issue reporter', 'a contributor opens an issue'),
-            ('reviewer', 'Pull request reviewer', 'a contributor comments on a pull request opened by another person'),
+    info = [['responder', 'Bug triaging', 'a contributor comments on an issue opened by another person'],
+            ['merger', 'Merger', 'a contributor merges a pull request'],
+            ['reporter', 'Issue reporter', 'a contributor opens an issue'],
+            ['reviewer', 'Pull request reviewer', 'a contributor comments on a pull request opened by another person'],
            ]
 
     for i in info:
         with open(os.path.join(repoPath, i[0] + 's.txt')) as f:
             contributors = f.read()
-        deltaResponse, noResponse = getRampTime(newcomers, contributors, i[0])
+        i.append(sortContributors(contributors))
+        deltaResponse, noResponse = getRampTime(newcomers, i[3], i[0])
         graphRampTime(deltaResponse, noResponse,
                       '%s ramp up time for newcomers to<br>' % i[1] + repoPath,
                       '<br>Number of days before %s' % i[2],
                       os.path.join(repoPath, i[0] + 's-rampup.html'))
+        freq, nodata = getFrequency(i[3])
+        graphFrequency(freq,
+                      '%s frequency for contributors to<br>' % i[1] + repoPath,
+                      '<br>Length of time (weeks) spent in that role',
+                      os.path.join(repoPath, i[0] + 's-frequency.html'))
 
 
 # Make a better contribution graph for a project over time
@@ -138,7 +173,7 @@ def main():
     parser.add_argument('owner', help='github username of repository owner')
     args = parser.parse_args()
     repoPath = os.path.join(args.owner, args.repository)
-    createRampTimeGraphs(repoPath)
+    createGraphs(repoPath)
 
 if __name__ == "__main__":
     main()
