@@ -12,6 +12,13 @@ https://github.com/sigmavirus24/github3.py
 
 pip install --pre github3.py
 
+Creating html pages
+-------------------
+
+Bootstrap is used to create mobile-friendly html (MIT license):
+
+http://getbootstrap.com
+
 Repository License
 ==================
 
