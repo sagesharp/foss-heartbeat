@@ -137,6 +137,9 @@ def appendIssueResponders(issueDir, issueResponders, issueCreator):
 def jsonIsPullRequest(filename):
     return re.match(r'pr-[0-9]+', filename)
 
+def jsonIsPullRequestComment(filename):
+    return re.match(r'pr-comment-[0-9]+', filename)
+
 # Track contributors with a merged pull request,
 # submitters who opened a pull request that wasn't merged,
 # and the mergers (people who merged those pull requests).

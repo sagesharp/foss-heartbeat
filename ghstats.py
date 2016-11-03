@@ -43,6 +43,27 @@ import argparse
 from datetime import datetime, timedelta
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot, offline
 from plotly.graph_objs import *
+from ghcategorize import jsonIsPullRequest, jsonIsPullRequestComment
+
+# Create a bar chart showing the ways different newcomers get involved
+def graphNewcomers(repoPath, newcomers):
+    # Sometimes we get bad data?
+    newcomers = [x for x in newcomers if len(x.split('\t')) >= 4]
+
+    issue = [x for x in newcomers if x.split('\t')[2].startswith('issue')]
+    comment = [x for x in newcomers if x.split('\t')[2].startswith('comment')]
+    pull = [x for x in newcomers if jsonIsPullRequest(x.split('\t')[2])]
+    commentPR = [x for x in newcomers if jsonIsPullRequestComment(x.split('\t')[2])]
+    # For each line, pull out the filename (third item)
+    data = [
+        Bar(x=['Opened an issue', 'Commented on an issue<BR>opened by someone else', 'Opened a pull request', 'Commented on a pull request<BR>opened by someone else'],
+            y= [len(issue), len(comment), len(pull), len(commentPR)],
+           )]
+    layout = Layout(
+        title='First contribution types for<BR>' + repoPath,
+    )
+    fig = Figure(data=data, layout=layout)
+    offline.plot(fig, filename=os.path.join(repoPath, 'first-contributions.html'), auto_open=False)
 
 def sortContributors(data):
     """Returns a dictionary with username as the key to return a list of contributions,
@@ -218,6 +239,7 @@ def createGraphs(repoPath):
     # No clue why readline is returning single characters, so let's do it this way:
     with open(os.path.join(repoPath, 'first-interactions.txt')) as newcomersFile:
         newcomers = newcomersFile.read().split('\n')
+    graphNewcomers(repoPath, newcomers)
 
     info = [['responder', 'Bug triaging', 'a contributor comments on an issue opened by another person'],
             ['merger', 'Merger', 'a contributor merges a pull request'],
