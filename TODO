@@ -39,6 +39,15 @@ X. What was a user's first interaction with a project?
 
 (Note: 5,6,7,8 can be visualized with a dot chart)
 
+X. Help newcomers determine who they should be paying attention to review wise:
+
+recently active (frequency of recent comments? e.g. comments/week in the last X period)
+long-standing
+
+sort scatter data by contribs per week (largest first)
+take the top 1/4 of the array
+charting median value on the chart might be good
+
 
 Roles to look at later:
    - Documentation vs code contributor (opened a PR including a doc file that was merged)

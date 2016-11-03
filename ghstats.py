@@ -93,11 +93,71 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
     fig = Figure(data=data, layout=layout)
     offline.plot(fig, filename=filename, auto_open=False)
 
+# FIXME Maybe look for the word 'bot' in the user description?
+def getBots():
+    return ['bors', 'rust-highfive', 'rfcbot']
+
 def graphFrequency(data, graphtitle, xtitle, filename):
-    data = [Scatter(x=[coord[0] for coord in data],
-                    y=[coord[1] for coord in data],
+    botNames = getBots()
+    data = sorted(data, key=lambda tup: tup[2], reverse=True)
+    # Filter out any bots
+    bots = [x for x in data if x[3] in botNames]
+    nobots = [x for x in data if not (x[3] in botNames)]
+    # Filter out contributors who have been inactive for a year
+    recent = nobots[0][4]
+    for x in nobots:
+        if x[4] > recent:
+            recent = x[4]
+    recent = datetime(recent.year - 1, recent.month, recent.day, recent.hour, recent.minute, recent.second, recent.microsecond)
+    inactive = [x for x in nobots if x[4] < recent]
+    active = [x for x in nobots if x[4] >= recent]
+
+    # Divide the remaining list into roughly fourths
+    # to get 25th, 50th, 75th percentiles
+    # Up to 3 extra people may end up in the last quartile
+    # FIXME: I'm sure there's a more Pythonic way to do this
+    quartiles = []
+    chunks = int(len(active)/4)
+    for i in range(0, 4):
+        if i != 3:
+            quartiles.append(active[(chunks*i):(chunks*(i+1))])
+        else:
+            quartiles.append(active[(chunks*i):len(active)+1])
+    data = []
+    labels = [
+        ('rgba(213, 94, 0, .8)', 'Top 25% of active contributors'),
+        ('rgba(230, 159, 0, .8)', 'Above average active contributors'),
+        ('rgba(86, 180, 233, .8)', 'Somewhat active contributors'),
+        ('rgba(0, 114, 178, .8)', 'Least active contributors'),
+    ]
+    for i in range(4):
+        data.append(
+            Scatter(x=[coord[0] for coord in quartiles[i]],
+                    y=[coord[1] for coord in quartiles[i]],
+                    name=labels[i][1],
                     mode = 'markers',
-                   text=[coord[2] for coord in data])]
+                    text=[coord[3] for coord in quartiles[i]],
+                    marker=dict(color=labels[i][0])
+                   )
+        )
+    if inactive:
+        data.append(Scatter(x=[coord[0] for coord in inactive],
+                        y=[coord[1] for coord in inactive],
+                        name='Inactive for more than 1 year',
+                        mode = 'markers',
+                        text=[coord[3] for coord in inactive],
+                        marker=dict(color='rgba(0, 0, 0, .8)')
+                           )
+                   )
+    if bots:
+        data.append(Scatter(x=[coord[0] for coord in bots],
+                        y=[coord[1] for coord in bots],
+                        name='Bots',
+                        mode = 'markers',
+                        text=[coord[3] for coord in bots],
+                        marker=dict(color='rgba(240, 228, 66, .8)')
+                           )
+                   )
     layout = Layout(
         title=graphtitle,
         yaxis=dict(title='Number of contributions'),
@@ -117,10 +177,12 @@ def getFrequency(contributorDates):
             nodata = nodata + 1
         else:
             length = (d[-1] - d[0]).days / 7.
-            #if length != 0:
-            #contribsPerWeek = len(d) / length
+            if length != 0:
+                contribsPerWeek = len(d) / length
+            else:
+                contribsPerWeek = 0
             contribs = len(d)
-            data.append((length, contribs, user))
+            data.append([length, contribs, contribsPerWeek, user, d[-1]])
     return data, nodata
 
 # For people considering getting involved in an open source community,
