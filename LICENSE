@@ -19,6 +19,13 @@ Bootstrap is used to create mobile-friendly html (MIT license):
 
 http://getbootstrap.com
 
+Generating interactive graphs
+-----------------------------
+
+Plot.ly is used to create graphs (MIT license):
+
+https://github.com/plotly/plotly.js/
+
 Repository License
 ==================
 
