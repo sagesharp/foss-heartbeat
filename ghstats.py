@@ -126,7 +126,7 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
                    '{:.2f}'.format(len(deltas)/(len(deltas)+len(nocontribs))*100) + '%')
     )
     fig = Figure(data=data, layout=layout)
-    offline.plot(fig, filename=filename, auto_open=False)
+    return offline.plot(fig, show_link=False, include_plotlyjs=False, output_type='div')
 
 # FIXME Maybe look for the word 'bot' in the user description?
 def getBots():
@@ -199,7 +199,7 @@ def graphFrequency(data, graphtitle, xtitle, filename):
         xaxis=dict(title= xtitle),
     )
     fig = Figure(data=data, layout=layout)
-    offline.plot(fig, filename=filename, auto_open=False)
+    return offline.plot(fig, show_link=False, include_plotlyjs=False, output_type='div')
 
 # Given a dictionary that contains lists of contribution dates,
 # find number of weeks involved as X role and
@@ -241,7 +241,7 @@ def createGraphs(owner, repo, htmldir):
     # No clue why readline is returning single characters, so let's do it this way:
     with open(os.path.join(repoPath, 'first-interactions.txt')) as newcomersFile:
         newcomers = newcomersFile.read().split('\n')
-    html = {'newcomers': graphNewcomers(repoPath, newcomers)}
+    html = {'newcomers-ramp': graphNewcomers(repoPath, newcomers)}
 
     info = [['responder', 'Bug triaging', 'a contributor comments on an issue opened by another person'],
             ['merger', 'Merger', 'a contributor merges a pull request'],
@@ -254,12 +254,12 @@ def createGraphs(owner, repo, htmldir):
             contributors = f.read()
         i.append(sortContributors(contributors))
         deltaResponse, noResponse = getRampTime(newcomers, i[3], i[0])
-        graphRampTime(deltaResponse, noResponse,
+        html[i[0] + '-ramp'] = graphRampTime(deltaResponse, noResponse,
                       '%s ramp up time for newcomers to<br>' % i[1] + repoPath,
                       '<br>Number of days before %s' % i[2],
                       os.path.join(repoPath, i[0] + 's-rampup.html'))
         freq, nodata = getFrequency(i[3])
-        graphFrequency(freq,
+        html[i[0] + '-freq'] = graphFrequency(freq,
                       '%s frequency for contributors to<br>' % i[1] + repoPath,
                       '<br>Length of time (weeks) spent in that role',
                       os.path.join(repoPath, i[0] + 's-frequency.html'))

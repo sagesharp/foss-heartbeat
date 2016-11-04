@@ -38,9 +38,20 @@ def overwritehtml(htmldir, owner, repo, html):
         hfile.write(index)
     
     newcomers = getprojecthtml(htmldir, owner, repo, 'newcomers.html')
-    newcomers = re.sub(r'\$FIRST_CONTRIBS', html['newcomers'], newcomers)
+    for name in 'newcomers', 'responder', 'merger', 'reporter', 'reviewer':
+        newcomers = re.sub('\$' + name.upper(), html[name + '-ramp'], newcomers)
     with open(os.path.join(htmldir, owner, repo, 'newcomers.html'), 'w') as hfile:
         hfile.write(newcomers)
+
+    contributors = getprojecthtml(htmldir, owner, repo, 'contributors.html')
+    for name in 'responder', 'merger', 'reporter', 'reviewer':
+        contributors = re.sub('\$' + name.upper(), html[name + '-freq'], contributors)
+    with open(os.path.join(htmldir, owner, repo, 'contributors.html'), 'w') as hfile:
+        hfile.write(contributors)
+
+    sentiment = getprojecthtml(htmldir, owner, repo, 'sentiment.html')
+    with open(os.path.join(htmldir, owner, repo, 'sentiment.html'), 'w') as hfile:
+        hfile.write(sentiment)
 
     # Regenerate index.html from the list of directories in docs
     # that contain heartbeat.html
