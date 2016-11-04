@@ -44,6 +44,7 @@ from datetime import datetime, timedelta
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot, offline
 from plotly.graph_objs import *
 from ghcategorize import jsonIsPullRequest, jsonIsPullRequestComment
+from ghreport import overwritehtml
 
 # Create a bar chart showing the ways different newcomers get involved
 def graphNewcomers(repoPath, newcomers):
@@ -63,7 +64,7 @@ def graphNewcomers(repoPath, newcomers):
         title='First contribution types for<BR>' + repoPath,
     )
     fig = Figure(data=data, layout=layout)
-    offline.plot(fig, filename=os.path.join(repoPath, 'first-contributions.html'), auto_open=False)
+    return offline.plot(fig, show_link=False, include_plotlyjs=False, output_type='div')
 
 def sortContributors(data):
     """Returns a dictionary with username as the key to return a list of contributions,
@@ -235,11 +236,12 @@ def getFrequency(contributorDates):
 # Hint: read file into memory with .read() and then use re.findall(pattern, file contents)
 # A box plot would be good to show median, quartiles, max/min, and perhaps the underlying data?
 # https://plot.ly/python/box-plots/
-def createGraphs(repoPath):
+def createGraphs(owner, repo, htmldir):
+    repoPath = os.path.join(owner, repo)
     # No clue why readline is returning single characters, so let's do it this way:
     with open(os.path.join(repoPath, 'first-interactions.txt')) as newcomersFile:
         newcomers = newcomersFile.read().split('\n')
-    graphNewcomers(repoPath, newcomers)
+    html = {'newcomers': graphNewcomers(repoPath, newcomers)}
 
     info = [['responder', 'Bug triaging', 'a contributor comments on an issue opened by another person'],
             ['merger', 'Merger', 'a contributor merges a pull request'],
@@ -262,15 +264,17 @@ def createGraphs(repoPath):
                       '<br>Length of time (weeks) spent in that role',
                       os.path.join(repoPath, i[0] + 's-frequency.html'))
 
+    # Use bootstrap to generate mobile-friendly webpages
+    overwritehtml(htmldir, owner, repo, html)
 
 # Make a better contribution graph for a project over time
 def main():
     parser = argparse.ArgumentParser(description='Gather statistics from scraped github information.')
     parser.add_argument('repository', help='github repository name')
     parser.add_argument('owner', help='github username of repository owner')
+    parser.add_argument('htmldir', help='directory where report templates and project reports are stored')
     args = parser.parse_args()
-    repoPath = os.path.join(args.owner, args.repository)
-    createGraphs(repoPath)
+    createGraphs(args.owner, args.repository, args.htmldir)
 
 if __name__ == "__main__":
     main()
