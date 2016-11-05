@@ -2,3 +2,5 @@ github3.py==1.0.0a4
 requests==2.11.1
 uritemplate==3.0.0
 uritemplate.py==3.0.2
+statistics==1.0.3.5
+plotly==1.12.9
