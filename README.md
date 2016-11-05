@@ -1,8 +1,13 @@
+# foss-heartbeat
+
 Open source communities are made of people, who contribute in many different
 ways. What makes a person more likely to continue participating in a project
 and move into roles of greater responsibility?
 
-This project identifies seven major contribution types:
+## Identifying contributors
+
+**foss-hearbeat** identifies seven major contribution types:
+
  - Issue reporter
  - Issue responder
  - Code contributor
@@ -11,16 +16,20 @@ This project identifies seven major contribution types:
  - Maintainer
  - Connector
 
-This project uses contributor participation data (currently from github) to
-categorize users into these roles, and then perform data analysis to answer
+This project uses contributor participation data (currently from GitHub) to
+categorize users into these seven roles.
+
+## Answering key contribution questions
+
+Performing data analysis on this participation data seeks to answer
 questions about what factors attract and retain those types of contributors.
 
-There are many different questions you could ask once you can categorize
-contributors and examine their contributions. The first goals of this project
-is to answer the question:
+While there are many different questions you could ask once you categorize
+contributors and examine their contributions, the first major goal of this
+project is to answer the question:
 
-What impact does positive or negative language have on contributor
-participation?
+**What impact does positive or negative language have on contributor
+participation?**
 
-This project seeks to answer that question by applying sentiment analysis on
-the comments community members make on others' contributions.
+**foss-heartbeat** seeks to answer that question by applying sentiment
+analysis on the comments community members make on others' contributions.
