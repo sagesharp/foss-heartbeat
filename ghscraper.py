@@ -6,18 +6,18 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # This python script scrapes github issue information, including comments.
 # The script dumps the json strings into files in a tree structure:
-# 
+#
 # .
 # |-- github owner
 #     |-- repository name
@@ -205,7 +205,7 @@ def scrapePullRequestComments(repo, repoPath):
     # Get the list of all directories in the repoPath, looking for issue directories.
     issueList = []
     skippedIssues = 0
-   
+
     # Find all issues that are a pull request
     for f in os.listdir(repoPath):
         if not f.startswith('issue-'):
@@ -253,21 +253,26 @@ def scrapePullRequestComments(repo, repoPath):
                       datetime.datetime.now() + datetime.timedelta(minutes = GITHUB_RATELIMIT_INTERVAL))
                 time.sleep(60*GITHUB_RATELIMIT_INTERVAL)
 
+def __login(args):
+    try:
+        with open(args.credentials_file_or_token, 'r') as f:
+            username = f.readline().rstrip()
+            password = f.readline().rstrip()
+            return login(username=username, password=password)
+    except IOError:
+        return login(token=args.credentials_file_or_token)
+
 def main():
     parser = argparse.ArgumentParser(description='Scrape issues and comments from a github repository, by authenticating as a github user.')
     parser.add_argument('repository', help='github repository name')
     parser.add_argument('owner', help='github username of repository owner')
-    parser.add_argument('login', help='File storing github username and password to use for authentication (two lines)')
+    parser.add_argument('credentials_file_or_token', help='OAuth token or path to file storing github username and password to use for authentication (two lines)')
     args = parser.parse_args()
 
     repoPath = os.path.join(args.owner, args.repository)
     lastIssue = os.path.join(repoPath, 'last-processed-issue'+ '.txt')
 
-    with open(args.login, 'r') as f:
-        username = f.readline().rstrip()
-        password = f.readline().rstrip()
-
-    g = login(username, password)
+    g = __login(args)
     repo = g.repository(args.owner, args.repository)
     if not repo:
         print('No such repo.')
@@ -285,4 +290,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
