@@ -47,6 +47,8 @@ May require `sudo`.
 ### Scrape information from GitHub
 
 First, scrape information from GitHub for each repository you're analyzing.
+Note that this step may require several hours or even a day, due to github
+API rate limits.
 
 ```bash
 $ python ghscraper.py GITHUB_REPO_NAME GITHUB_OWNER_NAME FILE_WITH_CREDENTIALS
@@ -62,7 +64,8 @@ $ python ghscraper.py GITHUB_REPO_NAME GITHUB_OWNER_NAME GITHUB_OAUTH_TOKEN
 
 ### Categorize
 
-Then categorize the data.
+Next, run the script to categorize github interactions into different types
+of open source contribution types:
 
 ```bash
 $ python ghcategorize.py GITHUB_REPO_NAME GITHUB_OWNER_NAME
@@ -70,17 +73,8 @@ $ python ghcategorize.py GITHUB_REPO_NAME GITHUB_OWNER_NAME
 
 ### Stats
 
-Then generate statistics.
+Then generate html reports with statistics (note this imports functions from ghreport.py)
 
 ```bash
 $ python ghstats.py GITHUB_REPO_NAME GITHUB_OWNER_NAME docs/
-```
-
-
-### Report
-
-Now generate a report to visualize the categorized stats data.
-
-```bash
-$ python ghreport.py foo bar
 ```
