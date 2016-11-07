@@ -50,6 +50,7 @@ sort scatter data by contribs per week (largest first)
 take the top 1/4 of the array
 charting median value on the chart might be good
 
+10. Consider allowing the software to be pointed at one or more organizations to get a more complete view of a community across its various codebases
 
 Roles to look at later:
    - Documentation vs code contributor (opened a PR including a doc file that was merged)
