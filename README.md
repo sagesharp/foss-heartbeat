@@ -78,3 +78,7 @@ Then generate html reports with statistics (note this imports functions from ghr
 ```bash
 $ python ghstats.py GITHUB_REPO_NAME GITHUB_OWNER_NAME docs/
 ```
+
+The html report will be created in ```docs/GITHUB_OWNER_NAME/GITHUB_REPO_NAME```
+You will need to hand-edit ```docs/index.html```
+to link to ```docs/GITHUB_OWNER_NAME/GITHUB_REPO_NAME/foss-heartbeat.html```.
