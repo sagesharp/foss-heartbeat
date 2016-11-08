@@ -1,26 +1,5 @@
 Meta: look into Python classes, since indexing into arrays is unreadable and prone to introducing bugs.
 
-X. GET ALL THE DATA!!!! (And document the date I pulled the data on)
-
-X. From their initial interaction with a project, how long did it take them to achieve that role?
-
-6. What length of time did they take that role on (first action to last action)?
-
-7. During their time in that role, was their average number of actions in that role per month?
-
-8. Are they active now in that role?
-
-(Note: 5,6,7,8 can be visualized with a dot chart)
-
-X. Help newcomers determine who they should be paying attention to review wise:
-
-recently active (frequency of recent comments? e.g. comments/week in the last X period)
-long-standing
-
-sort scatter data by contribs per week (largest first)
-take the top 1/4 of the array
-charting median value on the chart might be good
-
 10. Consider allowing the software to be pointed at one or more organizations to get a more complete view of a community across its various codebases
 
 Roles to look at later:
