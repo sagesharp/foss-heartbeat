@@ -2,11 +2,6 @@ Meta: look into Python classes, since indexing into arrays is unreadable and pro
 
 10. Consider allowing the software to be pointed at one or more organizations to get a more complete view of a community across its various codebases
 
-Roles to look at later:
-   - Documentation vs code contributor (opened a PR including a doc file that was merged)
-     This is too much data to look at, since it would involve queries into the files touched for the pull request.
-
-
 Questions I want to answer for newcomers looking for a project:
 
 On average, X percent of $PROJECT contributors are $ROLE, and it takes them Y number of days to ramp up.
