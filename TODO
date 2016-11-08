@@ -4,15 +4,6 @@ X. GET ALL THE DATA!!!! (And document the date I pulled the data on)
 
 2. Find the project's bots.
 
-   Rust has a couple bots:
-    - bors is a test and merge bot.
-      https://github.com/graydon/bors
-      Someone can approve a PR by commenting '@bors r+'
-      They can also roll up a PR into a daily(?) batch of commits
-    - rust-highfive
-      suggest reviewers based on which files are touched
-      https://github.com/nrc/highfive
-
 X. From their initial interaction with a project, how long did it take them to achieve that role?
 
 6. What length of time did they take that role on (first action to last action)?
