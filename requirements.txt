@@ -1,6 +1,9 @@
 github3.py==1.0.0a4
+numpy==1.11.2
+plotly==1.12.9
+pytz==2016.7
 requests==2.11.1
+scipy==0.18.1
+six==1.10.0
 uritemplate==3.0.0
 uritemplate.py==3.0.2
-statistics==1.0.3.5
-plotly==1.12.9
