@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
+from datetime import datetime, timedelta
 import os
 from math import sqrt
 import json
@@ -96,8 +97,17 @@ def separatePRs(repoPath, username):
             prSoup = json.load(f)
         if not prSoup['merged']:
             merged = 0
+            seconds = None
         else:
             merged = 1
+            ctime = datetime.strptime(prSoup['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+            mtime = datetime.strptime(prSoup['merged_at'], "%Y-%m-%dT%H:%M:%SZ")
+            seconds = (mtime - ctime).total_seconds()
+            if (seconds < 0):
+                print("WARN: PR", os.path.join(repoPath, directory, prFile[0]), "merged before it was created?")
+                print("Created", ctime)
+                print("Merged", mtime)
+                seconds = 0
 
         # Figure out if username made an issue or pr comment
         comments = [x for x in files if jsonIsPullRequestComment(x) or x.startswith('comment-')]
@@ -108,21 +118,13 @@ def separatePRs(repoPath, username):
                 if user == username:
                     match = True
         if match:
-            interaction.append((os.path.join(repoPath, directory), merged))
+            interaction.append((os.path.join(repoPath, directory), merged, seconds))
         else:
-            noInteraction.append((os.path.join(repoPath, directory), merged))
+            noInteraction.append((os.path.join(repoPath, directory), merged, seconds))
     return interaction, noInteraction
 
 # Now that we have the dataset for our two populations, we find:
-def hypothesisTest(pop1, pop2, d0):
-    for pop in (pop1, pop2):
-        values = [x[1] for x in pop]
-        print("Population:")
-        print("Mean:", numpy.mean(values))
-        print("Standard Deviation:", numpy.std(values))
-        print("Count:", len(values))
-    values1 = [x[1] for x in pop1]
-    values2 = [x[1] for x in pop2]
+def hypothesisTest(values1, values2, d0):
     #   x1 = mean of the values of population1
     x1 = numpy.mean(values1)
     #   x2 = mean of the values of population2
@@ -185,32 +187,47 @@ def hypothesisTest(pop1, pop2, d0):
     # however, we want the area under the t-distribution *after* t,
     # so we subtract that probability from 1 to get the area after t.
     p = 1 - stats.t.cdf(t, n1 + n2 - 2)
-    # Now that we know whether there is a statistical difference between the two populations,
-    # we turn to effect size to calculate the impact of being in the second population
-    # See http://www.leeds.ac.uk/educol/documents/00002182.htm
-    effect = (x1 - x2) / sp
 
     print("Population H0: mean =", x1, "std dev = ", s1, "count =", n1)
     print("Population H1: mean =", x2, "std dev = ", s2, "count =", n2)
-    print("std dev =", sp, "t value =", t, "p =", p, "effect size =", effect)
+    print("std dev =", sp, "t value =", t, "p =", p)
 
-    return t, p, effect
+    return t, p, x1, x2
 
 def main():
     parser = argparse.ArgumentParser(description='Gather statistics from scraped github information.')
     parser.add_argument('repository', help='github repository name')
     parser.add_argument('owner', help='github username of repository owner')
     args = parser.parse_args()
+
     pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive')
+
     print("Null hypothesis (H0): rust-highfive has no impact on whether a pull request is merged.")
     print("Alternative hypothesis (H1): rust-highfive causes more pull requests to be merged.")
-    t, p, effect = hypothesisTest(pop1, pop2, 0)
+    t, p, x1, x2 = hypothesisTest([x[1] for x in pop1],[x[1] for x in pop2], 0)
     if p < 0.01:
         print("We have 99% confidence that rust-highfive causes more pull requests to be merged.")
-    if p < 0.05:
+    elif p < 0.05:
         print("We have 95% confidence that rust-highfive causes more pull requests to be merged.")
     else:
         print("rust-highfive does not cause more pull requests to be merged.")
+
+    interactValues = [x[2] for x in pop1 if x[1] == 1]
+    noInteractValues = [x[2] for x in pop2 if x[1] == 1]
+    print("Null hypothesis (H0): rust-highfive has no impact on the length of time a pull request is open.")
+    print("Alternative hypothesis (H0): rust-highfive causes pull requests to remain open longer.")
+    t, p, x1, x2 = hypothesisTest(interactValues, noInteractValues, 0)
+    if p < 0.01:
+        print("We have 99% confidence that rust-highfive causes pull requests to remain open longer.")
+    elif p < 0.05:
+        print("We have 95% confidence that rust-highfive causes more pull requests to remain open longer.")
+    else:
+        print("rust-highfive does not cause more pull requests to remain open longer.")
+
+    if p < 0.05:
+        print("Pull requests with a comment from rust-highfive were open",
+              str(timedelta(seconds=x1-x2)),
+              "longer on average.")
 
 if __name__ == "__main__":
     main()
