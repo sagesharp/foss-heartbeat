@@ -124,7 +124,7 @@ def separatePRs(repoPath, username):
     return interaction, noInteraction
 
 # Now that we have the dataset for our two populations, we find:
-def hypothesisTest(values1, values2, d0):
+def hypothesisTest(values1, values2, d0, debug):
     #   x1 = mean of the values of population1
     x1 = numpy.mean(values1)
     #   x2 = mean of the values of population2
@@ -187,24 +187,38 @@ def hypothesisTest(values1, values2, d0):
     # however, we want the area under the t-distribution *after* t,
     # so we subtract that probability from 1 to get the area after t.
     p = 1 - stats.t.cdf(t, n1 + n2 - 2)
-
-    print("Population H0: mean =", x1, "std dev = ", s1, "count =", n1)
-    print("Population H1: mean =", x2, "std dev = ", s2, "count =", n2)
-    print("std dev =", sp, "t value =", t, "p =", p)
-
+    if (debug):
+        print("Population H0: mean =", x1, "std dev = ", s1, "count =", n1)
+        print("Population H1: mean =", x2, "std dev = ", s2, "count =", n2)
+        print("std dev =", sp, "t value =", t, "p =", p)
     return t, p, x1, x2
+
+def printTime(seconds):
+    retval = ""
+    if seconds < 60:
+        return "{0:.0f}".format(seconds) + " seconds"
+    if seconds < 60*60:
+        return "{0:.0f}".format(seconds / 60.) + " minutes"
+    if seconds < 60*60*24:
+        return "{0:.0f}".format(seconds / (60.*60)) + " hours"
+    if seconds < 60*60*24*7:
+        return "{0:.1f}".format(seconds / (60.*60*24)) + " days"
+    if seconds < 60*60*24*7*4:
+        return "{0:.1f}".format(seconds / (60.*60*24*7)) + " weeks"
+    return "{0:.1f}".format(seconds / (60.*60*24*7*4)) + " months"
 
 def main():
     parser = argparse.ArgumentParser(description='Gather statistics from scraped github information.')
     parser.add_argument('repository', help='github repository name')
     parser.add_argument('owner', help='github username of repository owner')
+    parser.add_argument("--debug", help="Print detailed statistics (sample count, std dev, t-value, and p-values)",
+                        action="store_true", default=False)
     args = parser.parse_args()
 
     pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive')
 
-    print("Null hypothesis (H0): rust-highfive has no impact on whether a pull request is merged.")
-    print("Alternative hypothesis (H1): rust-highfive causes more pull requests to be merged.")
-    t, p, x1, x2 = hypothesisTest([x[1] for x in pop1],[x[1] for x in pop2], 0)
+    print()
+    t, p, x1, x2 = hypothesisTest([x[1] for x in pop1],[x[1] for x in pop2], 0, args.debug)
     if p < 0.01:
         print("We have 99% confidence that rust-highfive causes more pull requests to be merged.")
     elif p < 0.05:
@@ -212,11 +226,19 @@ def main():
     else:
         print("rust-highfive does not cause more pull requests to be merged.")
 
+    if p < 0.05:
+        print("{0:.1f}%".format(x1*100),
+              "of pull requests where rust-highfive recommended a reviewer were merged.")
+        print("{0:.1f}%".format(x2*100),
+              "of pull requests without a comment from rust-highfive were merged.")
+        print("When rust-highfive recommended a reviewer,",
+              "{0:.1f}%".format((x1-x2)*100),
+              "more pull requests were merged")
+
+    print()
     interactValues = [x[2] for x in pop1 if x[1] == 1]
     noInteractValues = [x[2] for x in pop2 if x[1] == 1]
-    print("Null hypothesis (H0): rust-highfive has no impact on the length of time a pull request is open.")
-    print("Alternative hypothesis (H0): rust-highfive causes pull requests to remain open longer.")
-    t, p, x1, x2 = hypothesisTest(interactValues, noInteractValues, 0)
+    t, p, x1, x2 = hypothesisTest(interactValues, noInteractValues, 0, args.debug)
     if p < 0.01:
         print("We have 99% confidence that rust-highfive causes pull requests to remain open longer.")
     elif p < 0.05:
@@ -225,9 +247,12 @@ def main():
         print("rust-highfive does not cause more pull requests to remain open longer.")
 
     if p < 0.05:
-        print("Pull requests with a comment from rust-highfive were open",
-              str(timedelta(seconds=x1-x2)),
-              "longer on average.")
+        print(printTime(x1), "was the average number of days open for",
+              "pull requests where rust-highfive recommended a reviewer")
+        print(printTime(x2), "was the average number of days open for",
+              "pull requests where rust-highfive did not comment")
+        print("Merged pull requests with a comment from rust-highfive were open",
+              printTime(x1-x2), "longer on average.")
 
 if __name__ == "__main__":
     main()
