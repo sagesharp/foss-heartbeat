@@ -266,10 +266,10 @@ def main():
 
     print()
     # rust-highfive joined on 2014-09-18T23:32:23Z
-    # Let's check only the last two years of pull requests
-    print("Comparing rust-highfive against pull requests since 2012")
+    # Let's check only the year of pull requests before rust-highfive
+    print("Comparing rust-highfive against pull requests since 2013")
     print("========================================================")
-    cutoff = datetime.strptime("2012-09-18T23:32:23Z", "%Y-%m-%dT%H:%M:%SZ")
+    cutoff = datetime.strptime("2013-09-18T23:32:23Z", "%Y-%m-%dT%H:%M:%SZ")
     pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', cutoff)
     testSuccessfulMerges(pop1, pop2, "rust-highfive", args.debug)
     testPROpenLength(pop1, pop2, "rust-highfive", args.debug)
