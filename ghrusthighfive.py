@@ -77,7 +77,7 @@ import numpy
 # In order to test these two hypothesis, we divide the pull requests into two
 # populations: those PRs where rust-highfive commented, and those PRs where it
 # did not.
-def separatePRs(repoPath, username):
+def separatePRs(repoPath, username, cutoff):
     interaction = []
     noInteraction = []
     # Save the pr-*.txt filenames where username commented
@@ -95,6 +95,9 @@ def separatePRs(repoPath, username):
         # Figure out whether this pull request was merged or not
         with open(os.path.join(repoPath, directory, prFile[0])) as f:
             prSoup = json.load(f)
+        if cutoff and datetime.strptime(prSoup['created_at'], "%Y-%m-%dT%H:%M:%SZ") < cutoff:
+            continue
+
         if not prSoup['merged']:
             merged = 0
             seconds = None
@@ -207,38 +210,30 @@ def printTime(seconds):
         return "{0:.1f}".format(seconds / (60.*60*24*7)) + " weeks"
     return "{0:.1f}".format(seconds / (60.*60*24*7*4)) + " months"
 
-def main():
-    parser = argparse.ArgumentParser(description='Gather statistics from scraped github information.')
-    parser.add_argument('repository', help='github repository name')
-    parser.add_argument('owner', help='github username of repository owner')
-    parser.add_argument("--debug", help="Print detailed statistics (sample count, std dev, t-value, and p-values)",
-                        action="store_true", default=False)
-    args = parser.parse_args()
-
-    pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive')
-
+def testSuccessfulMerges(pop1, pop2, username, debug):
     print()
-    t, p, x1, x2 = hypothesisTest([x[1] for x in pop1],[x[1] for x in pop2], 0, args.debug)
+    t, p, x1, x2 = hypothesisTest([x[1] for x in pop1],[x[1] for x in pop2], 0, debug)
     if p < 0.01:
-        print("We have 99% confidence that rust-highfive causes more pull requests to be merged.")
+        print("We have 99% confidence that", username, "causes more pull requests to be merged.")
     elif p < 0.05:
-        print("We have 95% confidence that rust-highfive causes more pull requests to be merged.")
+        print("We have 95% confidence that", username, "causes more pull requests to be merged.")
     else:
-        print("rust-highfive does not cause more pull requests to be merged.")
+        print(username, "does not cause more pull requests to be merged.")
 
     if p < 0.05:
         print("{0:.1f}%".format(x1*100),
-              "of pull requests where rust-highfive recommended a reviewer were merged.")
+              "of pull requests where", username, "recommended a reviewer were merged.")
         print("{0:.1f}%".format(x2*100),
-              "of pull requests without a comment from rust-highfive were merged.")
-        print("When rust-highfive recommended a reviewer,",
+              "of pull requests without a comment from", username, "were merged.")
+        print("When", username, "recommended a reviewer,",
               "{0:.1f}%".format((x1-x2)*100),
               "more pull requests were merged")
 
+def testPROpenLength(pop1, pop2, username, debug):
     print()
     interactValues = [x[2] for x in pop1 if x[1] == 1]
     noInteractValues = [x[2] for x in pop2 if x[1] == 1]
-    t, p, x1, x2 = hypothesisTest(interactValues, noInteractValues, 0, args.debug)
+    t, p, x1, x2 = hypothesisTest(interactValues, noInteractValues, 0, debug)
     if p < 0.01:
         print("We have 99% confidence that rust-highfive causes pull requests to remain open longer.")
     elif p < 0.05:
@@ -253,6 +248,31 @@ def main():
               "pull requests where rust-highfive did not comment")
         print("Merged pull requests with a comment from rust-highfive were open",
               printTime(x1-x2), "longer on average.")
+
+def main():
+    parser = argparse.ArgumentParser(description='Gather statistics from scraped github information.')
+    parser.add_argument('repository', help='github repository name')
+    parser.add_argument('owner', help='github username of repository owner')
+    parser.add_argument("--debug", help="Print detailed statistics (sample count, std dev, t-value, and p-values)",
+                        action="store_true", default=False)
+    args = parser.parse_args()
+
+    print()
+    print("Comparing rust-highfive against all pull requests")
+    print("=================================================")
+    pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', None)
+    testSuccessfulMerges(pop1, pop2, "rust-highfive", args.debug)
+    testPROpenLength(pop1, pop2, "rust-highfive", args.debug)
+
+    print()
+    # rust-highfive joined on 2014-09-18T23:32:23Z
+    # Let's check only the last two years of pull requests
+    print("Comparing rust-highfive against pull requests since 2012")
+    print("========================================================")
+    cutoff = datetime.strptime("2012-09-18T23:32:23Z", "%Y-%m-%dT%H:%M:%SZ")
+    pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', cutoff)
+    testSuccessfulMerges(pop1, pop2, "rust-highfive", args.debug)
+    testPROpenLength(pop1, pop2, "rust-highfive", args.debug)
 
 if __name__ == "__main__":
     main()
