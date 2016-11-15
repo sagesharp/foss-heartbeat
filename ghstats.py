@@ -130,7 +130,7 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
 
 # FIXME Maybe look for the word 'bot' in the user description?
 def getBots():
-    return ['bors', 'rust-highfive', 'rfcbot']
+    return ['bors', 'bors-servo', 'highfive', 'rust-highfive', 'rfcbot']
 
 def graphFrequency(data, graphtitle, xtitle, filename):
     botNames = getBots()
