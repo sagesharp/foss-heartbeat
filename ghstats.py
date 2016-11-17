@@ -40,11 +40,115 @@ import os
 import re
 import statistics
 import argparse
+import numpy
 from datetime import datetime, timedelta
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot, offline
 from plotly.graph_objs import *
 from ghcategorize import jsonIsPullRequest, jsonIsPullRequestComment
 from ghreport import overwritehtml
+
+def issueDir(longerDir):
+    return re.sub(r'(.*issue-[0-9]+).*', '\g<1>', longerDir)
+
+def prOpenTimes(owner, repo):
+    repoPath = os.path.join(owner, repo)
+    with open(os.path.join(repoPath, 'contributors.txt')) as contributorsFile:
+        contributors = contributorsFile.read().split('\n')
+    with open(os.path.join(repoPath, 'mergers.txt')) as mergersFile:
+        mergers = mergersFile.read().split('\n')
+
+    # Get rid of any misformated lines
+    mergers = [m for m in mergers if len(m.split('\t')) > 3]
+    # The fourth item on the line is the file name
+    # For mergers, it may be a comment-*.json
+    # For contributors, it may be a pr_*.json
+    # Use the issue-* directory as the key
+    d = {issueDir(c.split('\t')[3]): [c.split('\t')[1]] for c in contributors if len(c.split('\t')) > 3}
+
+    # Note: we could have two mergers because someone asked bors to merge
+    # something for them.  This will add a bit of noise to the data, but we
+    # expect bors to be fast, so the time difference shouldn't matter.
+    # If we've already recorded a merger, skip the insertion.
+    for m in mergers:
+        if len(m.split('\t')) < 3:
+            continue
+        key = issueDir(m.split('\t')[3])
+        if not key in d.keys():
+            print("Someone marked in mergers.txt as merger for unmerged issue", key)
+            continue
+        if len(d[key]) == 2:
+            continue
+        d[key].append(m.split('\t')[1])
+
+    coords = [(datetime.strptime(value[0], "%Y-%m-%dT%H:%M:%SZ"),
+               datetime.strptime(value[1], "%Y-%m-%dT%H:%M:%SZ"))
+               for k, value in d.items()]
+    coords.sort()
+    return coords
+
+def graphMergeDelay(coords):
+    # Calculate, for each month, the average "age" of pull requests
+    # (the average amount of time a pull request is open before being merged).
+    # Discard all PRs opened after the end of the month
+    # discard all PRs closed before the beginning of the month
+    # in order to only look at PRs closed this month.
+    #
+    #       Jan                                 Feb
+    # |---------1--------|
+    #           |-------2---------|
+    #               |---2---|
+    #                           |-----------3------------|
+    #
+    # 1. If a pull request was opened before this month and closed this month,
+    #    count the length of time from when it was opened to when it was closed.
+    # 2. If a pull request was opened and closed in this month,
+    #    count the length of time from when it was opened to when it was closed.
+    # 3. If a pull request was opened this month but was not closed this month,
+    #    count the length of time from when it was opened to the end of this month.
+    #
+    # (So essentially, from when it was open to when it was closed or EOM,
+    # whichever is sooner)
+
+    beg = coords[0][0]
+    end = coords[-1][0]
+    means = []
+    bom = datetime(beg.year, beg.month, 1)
+    while True:
+        if bom.month+1 <= 12:
+            eom = datetime(bom.year, bom.month+1, bom.day)
+        else:
+            eom = datetime(bom.year+1, 1, bom.day)
+        openpr = [(x, min(y, eom)) for (x, y) in coords if x < eom and y > bom]
+        if not openpr:
+            means.append((eom, 0))
+            bom = eom
+            continue
+        lengths = [(y - x).total_seconds() / (60*60*24.) for (x, y) in openpr]
+        means.append((eom, numpy.average(lengths)))
+        bom = eom
+        if eom > end:
+            break
+
+    # Scatter chart - x is creation date, y is number of days open
+    data = [
+        Scatter(x=[x for (x, y) in coords],
+                y=[(y - x).total_seconds() / (60*60*24.)
+                   for (x, y) in coords],
+                mode='markers',
+                name='Pull requests<BR>by creation date'
+               ),
+        Scatter(x=[x for (x, y) in means],
+                y=[y for (x, y) in means],
+                name='Average time open'
+               ),
+    ]
+    layout = Layout(
+        title='Number of days a pull request is open',
+        yaxis=dict(title='Number of days open'),
+        xaxis=dict(title='Pull request creation date'),
+    )
+    fig = Figure(data=data, layout=layout)
+    return offline.plot(fig, show_link=False, include_plotlyjs=False, output_type='div')
 
 # Create a bar chart showing the ways different newcomers get involved
 def graphNewcomers(repoPath, newcomers):
@@ -263,6 +367,8 @@ def createGraphs(owner, repo, htmldir):
                       '%s frequency for contributors to<br>' % i[1] + repoPath,
                       '<br>Length of time (weeks) spent in that role',
                       os.path.join(repoPath, i[0] + 's-frequency.html'))
+    coords = prOpenTimes(owner, repo)
+    html['mergetime'] = graphMergeDelay(coords)
 
     # Use bootstrap to generate mobile-friendly webpages
     overwritehtml(htmldir, owner, repo, html)

@@ -46,6 +46,7 @@ def overwritehtml(htmldir, owner, repo, html):
     contributors = getprojecthtml(htmldir, owner, repo, 'contributors.html')
     for name in 'responder', 'merger', 'reporter', 'reviewer':
         contributors = re.sub('\$' + name.upper(), html[name + '-freq'], contributors)
+    contributors = re.sub('\$' + 'mergetime'.upper(), html['mergetime'], contributors)
     with open(os.path.join(htmldir, owner, repo, 'contributors.html'), 'w') as hfile:
         hfile.write(contributors)
 
