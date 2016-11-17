@@ -201,6 +201,9 @@ def appendReviewers(issueDir, contributor, reviewers, mergers):
             commentJson = json.load(commentFile)
         user, date = getUserDate(commentJson)
         merger, mergeDate = checkForBotCommand(commentJson, ['@bors: r+'])
+        # FIXME: it's possible that the command was issued to bors,
+        # but it rejected the pull request because it didn't pass.
+        # Need to also check the 'merged' flag in the pr-*.json file.
         if merger and mergeDate:
             mergers.append(('merger', mergeDate, merger, os.path.join(issueDir, jsonFile)))
         if user == contributor:
