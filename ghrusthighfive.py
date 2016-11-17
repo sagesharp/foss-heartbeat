@@ -111,6 +111,9 @@ def separatePRs(repoPath, username, cutoff):
                 print("Created", ctime)
                 print("Merged", mtime)
                 seconds = 0
+            else:
+                # Convert to hours, to make graphs easier to read
+                seconds = seconds / (60.*60)
 
         # Figure out if username made an issue or pr comment
         comments = [x for x in files if jsonIsPullRequestComment(x) or x.startswith('comment-')]
@@ -125,6 +128,47 @@ def separatePRs(repoPath, username, cutoff):
         else:
             noInteraction.append((os.path.join(repoPath, directory), merged, seconds))
     return interaction, noInteraction
+
+def separateByDate(repoPath, cutoff, startDate, endDate):
+    older = []
+    newer = []
+    for directory in os.listdir(repoPath):
+        if not os.path.isdir(os.path.join(repoPath, directory)):
+            continue
+
+        match = False
+        files = os.listdir(os.path.join(repoPath, directory))
+        prFile = [x for x in files if jsonIsPullRequest(x)]
+        if not prFile:
+            continue
+
+        # Figure out whether this pull request was merged or not
+        with open(os.path.join(repoPath, directory, prFile[0])) as f:
+            prSoup = json.load(f)
+
+        if not prSoup['merged']:
+            merged = 0
+            seconds = None
+        else:
+            merged = 1
+            ctime = datetime.strptime(prSoup['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+            mtime = datetime.strptime(prSoup['merged_at'], "%Y-%m-%dT%H:%M:%SZ")
+            seconds = (mtime - ctime).total_seconds()
+            if (seconds < 0):
+                print("WARN: PR", os.path.join(repoPath, directory, prFile[0]), "merged before it was created?")
+                print("Created", ctime)
+                print("Merged", mtime)
+                seconds = 0
+            else:
+                # Convert to hours, to make graphs easier to read
+                seconds = seconds / (60.*60)
+        if (startDate and ctime < startDate) or (endDate and ctime > endDate):
+            continue
+        if ctime < cutoff:
+            older.append((os.path.join(repoPath, directory), merged, seconds))
+        else:
+            newer.append((os.path.join(repoPath, directory), merged, seconds))
+    return older, newer
 
 # Now that we have the dataset for our two populations, we find:
 def hypothesisTest(values1, values2, d0, debug):
@@ -196,58 +240,65 @@ def hypothesisTest(values1, values2, d0, debug):
         print("std dev =", sp, "t value =", t, "p =", p)
     return t, p, x1, x2
 
-def printTime(seconds):
+def printTime(hours):
     retval = ""
-    if seconds < 60:
-        return "{0:.0f}".format(seconds) + " seconds"
-    if seconds < 60*60:
-        return "{0:.0f}".format(seconds / 60.) + " minutes"
-    if seconds < 60*60*24:
-        return "{0:.0f}".format(seconds / (60.*60)) + " hours"
-    if seconds < 60*60*24*7:
-        return "{0:.1f}".format(seconds / (60.*60*24)) + " days"
-    if seconds < 60*60*24*7*4:
-        return "{0:.1f}".format(seconds / (60.*60*24*7)) + " weeks"
-    return "{0:.1f}".format(seconds / (60.*60*24*7*4)) + " months"
+    if hours < 24:
+        return "{0:.0f}".format(hours) + " hours"
+    if hours < 24*7:
+        return "{0:.1f}".format(hours / (24)) + " days"
+    if hours < 24*7*4:
+        return "{0:.1f}".format(hours / (24*7)) + " weeks"
+    return "{0:.1f}".format(hours / (24*7*4)) + " months"
 
-def testSuccessfulMerges(pop1, pop2, username, debug):
+def testSuccessfulMerges(pop1, pop2, username, quantity, inaction, action, debug):
     print()
     t, p, x1, x2 = hypothesisTest([x[1] for x in pop1],[x[1] for x in pop2], 0, debug)
     if p < 0.01:
-        print("We have 99% confidence that", username, "causes more pull requests to be merged.")
+        print("We have 99% confidence that", username, "causes", quantity, "pull requests to be merged.")
     elif p < 0.05:
-        print("We have 95% confidence that", username, "causes more pull requests to be merged.")
+        print("We have 95% confidence that", username, "causes", quantity, "pull requests to be merged.")
     else:
-        print(username, "does not cause more pull requests to be merged.")
+        print(username, "does not cause", quantity, "pull requests to be merged.")
 
     if p < 0.05:
         print("{0:.1f}%".format(x1*100),
-              "of pull requests where", username, "recommended a reviewer were merged.")
+              "of pull requests where", username, action, "were merged.")
         print("{0:.1f}%".format(x2*100),
-              "of pull requests without a comment from", username, "were merged.")
+              "of pull requests where ", username, inaction, "were merged.")
         print("When", username, "recommended a reviewer,",
               "{0:.1f}%".format((x1-x2)*100),
               "more pull requests were merged")
 
-def testPROpenLength(pop1, pop2, username, debug):
+# This function measures whether a user has an impact on the length of time a PR is open.
+# H0: Average PR open time without the user (u1) = Average time with the user (u2)
+# H1: Average PR open time without the user (u1) > Average time with the user (u2)
+# pop1 is the population values without the user
+# pop2 is the population values with the user
+# inaction is the past-tense string descriptor for the impact of not having the user
+# action is the past-tense string descriptor for what the user does
+# debug causes the p-value, t-value, means, and standard deviation to be printed
+def testPROpenLength(pop1, pop2, username, inaction, action, debug):
     print()
     interactValues = [x[2] for x in pop1 if x[1] == 1]
     noInteractValues = [x[2] for x in pop2 if x[1] == 1]
     t, p, x1, x2 = hypothesisTest(interactValues, noInteractValues, 0, debug)
     if p < 0.01:
-        print("We have 99% confidence that rust-highfive causes pull requests to remain open longer.")
+        print("We have 99% confidence that pull requests where", username,
+              inaction, "remain open for more time.")
     elif p < 0.05:
-        print("We have 95% confidence that rust-highfive causes more pull requests to remain open longer.")
+        print("We have 95% confidence that pull requests where", username,
+              inaction, "remain open for more time.")
     else:
-        print("rust-highfive does not cause more pull requests to remain open longer.")
+        print("No conclusions can be reached with 95% certainty about whether")
+        print("pull requests where", username, inaction, "remain open for more time.")
 
     if p < 0.05:
-        print(printTime(x1), "was the average number of days open for",
-              "pull requests where rust-highfive recommended a reviewer")
-        print(printTime(x2), "was the average number of days open for",
-              "pull requests where rust-highfive did not comment")
-        print("Merged pull requests with a comment from rust-highfive were open",
-              printTime(x1-x2), "longer on average.")
+        print(printTime(x1), "was the average length of time pull requests were open when",
+              username, inaction)
+        print(printTime(x2), "was the average length of time pull requests were open when",
+              username, action)
+        print("Merged pull requests where", username, inaction, "were open",
+              printTime(x1-x2), "more on average.")
 
 def main():
     parser = argparse.ArgumentParser(description='Gather statistics from scraped github information.')
@@ -258,21 +309,33 @@ def main():
     args = parser.parse_args()
 
     print()
-    print("Comparing rust-highfive against all pull requests")
-    print("=================================================")
-    pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', None)
-    testSuccessfulMerges(pop1, pop2, "rust-highfive", args.debug)
-    testPROpenLength(pop1, pop2, "rust-highfive", args.debug)
-
-    print()
     # rust-highfive joined on 2014-09-18T23:32:23Z
     # Let's check only the year of pull requests before rust-highfive
-    print("Comparing rust-highfive against pull requests since 2013")
-    print("========================================================")
+    print("Comparing rust-highfive against pull requests since 2013-09-18:")
+    print("===============================================================")
     cutoff = datetime.strptime("2013-09-18T23:32:23Z", "%Y-%m-%dT%H:%M:%SZ")
-    pop1, pop2 = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', cutoff)
-    testSuccessfulMerges(pop1, pop2, "rust-highfive", args.debug)
-    testPROpenLength(pop1, pop2, "rust-highfive", args.debug)
+    rhf, norhf = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', cutoff)
+    testSuccessfulMerges(norhf, rhf, "rust-highfive", "more", "recommended a reviewer", "did not comment", args.debug)
+    testPROpenLength(norhf, rhf, "rust-highfive", "did not comment", "recommended a reviewer", args.debug)
+    testPROpenLength(rhf, norhf, "rust-highfive", "recommended a reviewer", "did not comment", args.debug)
+
+    # bors first started merging pull requests on 2013-02-02T00:46:02Z
+    # Break the data into pull requests before that date and after that date.
+    # See if bors had any impact on the percentage of successful merges
+    # or length of time a PR remains open.
+    # x1 = mean for pop1 (when bors interacted)
+    # x2 = mean for pop2 (when bors didn't interact)
+    print()
+    print("Comparing bors against pull requests from 2012-02-02 to 2014-02-02:")
+    print("===================================================================")
+    nobors, bors = separateByDate(os.path.join(args.owner, args.repository),
+                                datetime.strptime("2013-02-02T00:46:02Z", "%Y-%m-%dT%H:%M:%SZ"),
+                                datetime.strptime("2012-02-02T00:46:02Z", "%Y-%m-%dT%H:%M:%SZ"),
+                                datetime.strptime("2014-02-02T00:46:02Z", "%Y-%m-%dT%H:%M:%SZ"))
+    testSuccessfulMerges(nobors, bors, "bors", "more", "was not used", "initiated a CI test", args.debug)
+    #testSuccessfulMerges(bors, nobors, "bors", "less", "initiated a CI test", "was not used", args.debug)
+    testPROpenLength(nobors, bors, "bors", "was not used", "initiated a CI test", args.debug)
+    testPROpenLength(bors, nobors, "bors", "initiated a CI test", "was not used", args.debug)
 
 if __name__ == "__main__":
     main()
