@@ -242,15 +242,15 @@ def hypothesisTest(values1, values2, d0, debug):
         print("std dev =", sp, "t value =", t, "p =", p)
     return t, p, x1, x2
 
-def printTime(hours):
+def printTime(days):
     retval = ""
-    if hours < 24:
-        return "{0:.0f}".format(hours) + " hours"
-    if hours < 24*7:
-        return "{0:.1f}".format(hours / (24)) + " days"
-    if hours < 24*7*4:
-        return "{0:.1f}".format(hours / (24*7)) + " weeks"
-    return "{0:.1f}".format(hours / (24*7*4)) + " months"
+    if days < 1:
+        return "{0:.0f}".format(days*24) + " hours"
+    if days < 7:
+        return "{0:.1f}".format(days) + " days"
+    if days < 7*4:
+        return "{0:.1f}".format(days / 7) + " weeks"
+    return "{0:.1f}".format(hours / (7*4)) + " months"
 
 def testSuccessfulMerges(pop1, pop2, username, quantity, inaction, action, debug):
     print()
@@ -281,8 +281,8 @@ def testSuccessfulMerges(pop1, pop2, username, quantity, inaction, action, debug
 # debug causes the p-value, t-value, means, and standard deviation to be printed
 def testPROpenLength(pop1, pop2, username, inaction, action, debug):
     print()
-    interactValues = [x[2] for x in pop1 if x[1] == 1]
-    noInteractValues = [x[2] for x in pop2 if x[1] == 1]
+    interactValues = [x[2]/24. for x in pop1 if x[1] == 1]
+    noInteractValues = [x[2]/24. for x in pop2 if x[1] == 1]
     t, p, x1, x2 = hypothesisTest(interactValues, noInteractValues, 0, debug)
     if p < 0.01:
         print("We have 99% confidence that pull requests where", username,
