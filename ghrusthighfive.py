@@ -77,7 +77,7 @@ import numpy
 # In order to test these two hypothesis, we divide the pull requests into two
 # populations: those PRs where rust-highfive commented, and those PRs where it
 # did not.
-def separatePRs(repoPath, username, cutoff):
+def separatePRs(repoPath, username, startDate, endDate):
     interaction = []
     noInteraction = []
     # Save the pr-*.txt filenames where username commented
@@ -95,7 +95,9 @@ def separatePRs(repoPath, username, cutoff):
         # Figure out whether this pull request was merged or not
         with open(os.path.join(repoPath, directory, prFile[0])) as f:
             prSoup = json.load(f)
-        if cutoff and datetime.strptime(prSoup['created_at'], "%Y-%m-%dT%H:%M:%SZ") < cutoff:
+        if startDate and datetime.strptime(prSoup['created_at'], "%Y-%m-%dT%H:%M:%SZ") < startDate:
+            continue
+        if endDate and datetime.strptime(prSoup['created_at'], "%Y-%m-%dT%H:%M:%SZ") > endDate:
             continue
 
         if not prSoup['merged']:
@@ -311,10 +313,11 @@ def main():
     print()
     # rust-highfive joined on 2014-09-18T23:32:23Z
     # Let's check only the year of pull requests before rust-highfive
-    print("Comparing rust-highfive against pull requests since 2013-09-18:")
-    print("===============================================================")
-    cutoff = datetime.strptime("2013-09-18T23:32:23Z", "%Y-%m-%dT%H:%M:%SZ")
-    rhf, norhf = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', cutoff)
+    print("Comparing rust-highfive against pull requests from 2013-09-18 to 2015-09-18:")
+    print("============================================================================")
+    startDate = datetime.strptime("2013-09-18T23:32:23Z", "%Y-%m-%dT%H:%M:%SZ")
+    endDate = datetime.strptime("2015-09-18T23:32:23Z", "%Y-%m-%dT%H:%M:%SZ")
+    rhf, norhf = separatePRs(os.path.join(args.owner, args.repository), 'rust-highfive', startDate, endDate)
     testSuccessfulMerges(norhf, rhf, "rust-highfive", "more", "recommended a reviewer", "did not comment", args.debug)
     testPROpenLength(norhf, rhf, "rust-highfive", "did not comment", "recommended a reviewer", args.debug)
     testPROpenLength(rhf, norhf, "rust-highfive", "recommended a reviewer", "did not comment", args.debug)
