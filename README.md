@@ -36,6 +36,8 @@ analysis on the comments community members make on others' contributions.
 
 ## Install
 
+Clone the repository, change to the directory containing the repository.
+
 ```bash
 $ pip install -r requirements.txt
 ```
