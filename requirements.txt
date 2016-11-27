@@ -1,3 +1,4 @@
+emoji==0.3.9
 github3.py==1.0.0a4
 numpy==1.11.2
 plotly==1.12.9
