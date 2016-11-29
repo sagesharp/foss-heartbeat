@@ -30,13 +30,13 @@
 # Possible other options:
 # - remove breaks (lines with only ---- in them)
 # - is table formatting going to be a problem?
-# - remove URLs
 
 import os
 import re
 import argparse
 import json
 import emoji
+import string
 
 # Create a raw text file for the issue in question
 # Lines with a # are used to denote which json file the words came from
@@ -49,24 +49,69 @@ def scrubText(repoPath, issueDir):
             text = soup.get('body')
             if not text:
                 continue
-            scrubbed = scrubbed + '#' + os.path.join(issueDir, f) + '\r\n'
+
+            # Standardize on unix line endings.  (Yes, for whatever reason some
+            # projects use Windows line endings, some unix).
+            text = text.replace('\r\n', '\n')
+
+            # FIXME: insert a '.\n' before the file name to make sure dangling
+            # sentences from the last issue don't get combined with this one
+            scrubbed = scrubbed + '#' + os.path.join(issueDir, f) + '\n'
             # Strip out any blockquotes or inline code
-            text = re.sub('```.+?```', 'block-code', text, flags=re.DOTALL)
+            text = re.sub('```.+?```', 'block-code.', text, flags=re.DOTALL)
             text = re.sub('`[^`]+`', 'inline-code', text, flags=re.MULTILINE)
-            text = re.sub('^    .+?$', 'block-code', text, flags=re.MULTILINE)
+            text = re.sub('^    .+?$', 'block-code.', text, flags=re.MULTILINE)
             # Remove any quoted text, since we want the sentiment of the person posting
             text = re.sub('^>.+?$', '', text, flags=re.MULTILINE)
             # Replace any URLs with their text
             text = re.sub('\[(.*?)\]\(.*?\)', '\g<1>', text)
             text = re.sub('https?:.+? ', 'URL ', text)
-            text = re.sub('https?:.+?$', 'URL ', text, flags=re.MULTILINE)
+            text = re.sub('https?:.+?$', 'URL.', text, flags=re.MULTILINE)
             # convert emojis into their short hand code.
             # This makes it easier for me to correct sentiment in the training text.
             # It also allows the Standford CoreNLP to parse each emoji as a separate word,
             # which will allow us to train it for sentiment of groups of emoji.
             # E.g. :tea: is neutral, but :tea: :fire: references the "This is fine" meme
             text = emoji.demojize(text)
-            scrubbed = scrubbed + text + '\r\n'
+            # We often have blocks of code follow a colon, e.g.
+            #
+            # This is not correct syntax for python 3:
+            # ```print foo```
+            # This is the correct syntax:
+            # ```print(foo)```
+            #
+            # This code will translate that into
+            #
+            # This is not correct syntax for python 3:
+            # block-quote
+            # This is the correct syntax:
+            # block-quote
+            #
+            # The Standford CoreNLP assumes that the sentence continues
+            # after the colon, because it's assuming sentences like
+            # "Henry is the proper gentleman: charming, polite, and classy."
+            #
+            # We really want to consider lines that end with a : as a sentence.
+            # For lines that end with an emoji, we want to add a '.' at the end.
+            # Compromise and just add a '.' at the end of both.
+            text = re.sub(':$', ':.', text, flags=re.MULTILINE)
+
+            # FIXME: Standford CoreNLP doesn't parse '...' as the end of a sentence.
+            # If '...' is at the end of a line, turn it into '.'
+            # Does the text end with punctuation? If not, add a '.'
+
+            # FIXME: ugh, no idea what to do with sentences that end in :)
+
+            # FIXME: some people don't put periods after @tag someone.
+
+            # FIXME: Ignore comments from any bots? They tend to not use punctuation.
+
+            # FIXME: Ignore commands sent to bots
+
+            # We can find when they do this at the end of the line.
+            if text.split('\n')[-1][-1:] not in string.punctuation:
+                text = text + '.'
+            scrubbed = scrubbed + text + '\n'
     return scrubbed
 
 def main():
