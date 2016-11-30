@@ -1,0 +1,87 @@
+@PeterMtj Seriously? that's how you approach things? curse people? if you don't have respect for him then have some respect for yourself!
+@jon64digital He can vote down or say his personal opinion and that's fine! we don't need to get personal and certainly not curse people for their opinions!
+What's immature are the needless personal attacks against @fat over a *coding style*.
+Now stop being such an asshole.
+Also, I never called you an amateur, nor an asshat. I also don't think any amateur is inherently an asshat. That's cool that you maintain Stylus, props for that dude, but that doesn't mean you get to be a dick on the Internet.
+@cvrebert You sound like a real dick.
+I was **not** trying to rip anybody's soul out. It's a goddamned UMD factory function that has been in Bootstrap for like three days :anger:.
+At risk of sounding like an arrogant asshole, Bootstrap has done wonderfully well these last ~three years. I see no reason to abandon some of our favorite aspects that making working on Bootstrap fun for @fat and myself. We love our contributors and owe them a lot, but no one has put more thought, time, or effort into this project than the two of us (though @cvrebert is catching up :laughing:) these last few years.
+Me? I like using funny placeholder images, hipster ipsum text, funny commit messages, some snarky replies here and there, and shitty tweets to take my job here a bit less serious.
+Insinuating that I or my team are lazy or unwilling to learn our craft is a big fuck you, and that's not very productive (or nice).
+That's not meant to be dick-ish, it's just matter-of-fact.
+Alright, that was dick-ish all across the board @nextgenthemes and @patrickhlauke.
+@nextgenthemes You can make your point without telling someone they're being childish, ridiculous, etc.
+If my being a good person to other human beings annoys you, well you've got your own shit to deal with.
+If it's your prerogative to degrade people, be overly negative, etc, that's fine. If you don't like it, just leave. I have zero patience for folks being jerks to others here, especially brand new users, and want none of it in this community.
+While there were parts of this discussion where I'll admit that you have been respectful, for the most part that is not true, your attitude has been rude, condescending, insulting and defensive and you've rejected almost every logicall argument with a "because I can" attitude that is not normal, healthy or acceptable in a community of adults.
+Also, honestly, you're telling me to go fuck myself? In 8 years in the Ruby community, I've never seen this much discussed shitty attitude we supposedly have, until today. I'm seriously very disappointed.
+@manish-shrivastava No, you're not okay. You're being rude, and far too panicked over an apparent software bug you reported a couple of hours ago.
+@digitalgym for someone who never helped angular.js, you're pretty rude, you know?
+@petevine If there was any ambiguity before as to whether your comments are "somewhat aggressive", there certainly is not any such ambiguity now.
+@liigo Before responding with such an inflammatory note, it behooves you to *at least* look to see if there was a comment added when the issue was closed to see if your concerns have been addressed.
+This is not the first time your comments have reflected a lack of effort on your part to read over the general context before adding your two cents.  I can understand not reading every comment in a long thread, but in this case and others, you have been particularly rude.
+Not true, we only refuse to address hostile, rude and impolite comments. We're discussing your other ticket in a civil way so far, please don't ruin that one.
+
+When you do that you should be respectful of the people who will be using your code.
+I disagree with his initial response too, saying "No" is not professional and quite rude in my opinion but I think that the community can do better and stay civilized regardless to people's opinion. 
+@chuckswindler I can see how that question could be taken negatively if read in one way or another, but I imagine @cvrebert wasn't trying to be an asshole to anyone.
+We try to give everyone the benefit of the doubt with their comments. It's rare folks mean to sound like assholes here, so I'd ask you give us the benefit of the doubt as well.
+Even though this might be right, it is arrogant and IMO disrespectful.
+No need to be rude.
+Hopefully this thread dies, it's getting way out of hand. 
+PS: there is no need to be rude.
+Dear @rafaelfranca, I highly respect your many contributions to Rails. However, this was rude.
+The issue had been open for two weeks without anyone caring, then when someone finally steps in and helps the guy, you join the stage and slap everyone in the face. Not very nice.
+@dropout you inferred on your own that I was a lone cowboy, I've corrected you with clarification. Case closed. Even without that, your implication with your statement was rather rude, rather than just asking ;)
+Please don't be rude.
+The way you are communicating is rude, overly aggressive, and unprofessional. Please see the code of conduct. Fix your attitude or I will remove subsequent inappropriate remarks. Thanks.
+These are rude, and your overall dismissive tone is not welcome. You're free to disagree, but you should do so respectfully. Disrespectful comments are harmful to community discourse. They dissuade developers from becoming involved.
+@kofalt this type of comment is rude and unhelpful. We cannot foresee how this interacts with every software or usage under the sun. We are happy to get feedback, but keep it civil and constructive.
+@caitp can you please control your temper? the sentiment in your comments is inappropriate and on the border of violating our code of conduct. As a committer you are expected to show exemplary behavior in our community.
+It's certainly expected from you to be critical of things you perceive as incorrect or flawed but you can do so in a constructive way without being accusatory or rude.
+I ask you to please review the Code of Conduct for the project: URL In particular the third bullet, "Please be kind and courteous. There's no need to be mean or rude."
+The sort of commenting style you are using here may be acceptable in other projects, but in general I don't want people reading these threads to be turned away from the project.
+If you do not understand the moderation feedback you are receiving, please feel free to email the moderators at rust-mods@rust-lang.org to request elaboration or clarification.
+@mahkoh Hey, we can solve this problem without being rude about it. This is an annoying wart, for sure, but it's not the end of the world, and it will get fixed.
+@mahkoh You raise a legitimate issue, but you need to watch your language and tone of voice. The way you've written your ticket and replies is unnecessarily rude, and this isn't an isolated incident.
+When @pnkfelix was calling you out for being rude, this is what he was talking about.
+I know that you are frustrated. Please stop taking it out on others. It's not appropriate here.
+Let's keep it civil. :)
+However, I find the tone of your comment in this PR rather rude. I know you raised concerns in my original PR for the logging effect and that I failed to respond to them. Regardless, this PR is not informative as to why you have tweaked the show instance in the way you have done so. More so the comment is highly condescending with no need to be given in that manner. Had you said:.
+To be honest, I find i quite rude to just close the ticket, before giving me a chance to reply to your comment and/or before concluding that nothing new will be brought to the table.
+
+I'm not a dick, just an extremely frustrated person who has fielded nearly 1000 emails the last two weeks from customers I've setup on bootstrap who's only mistake was thinking they could drop the revision into it.
+I don't mean to sound snarky or asshole-ish, so please hear me out.
+No worries, thanks for asking. Apologies if I came off as dick-ish in my tone—just being succinct :).
+Apologies again for the asshole-ish brevity. Not my intention to crap on your heart and make folks regret using open source.
+@hnrch02 I don't think @fat meant anything mean by dropping the meme in there, so apologies if it came off as disrespectful.
+It started because you made a change 0aa66f0 which broke our [very large] application during an upgrade. I was upset. So I made a pull request as a **wtf?** knee-jerk reaction. The exact way I went about all of this was likely in bad taste.
+As far as everything else I've said, I do feel that his attitude was rude and inappropriate throughout this discussion regardless of the fact that he **generally** isn't rude or inapproprite, so I can't apologize for that. I also do feel that toward the end of this discussion some of the things I said and my choice of words were also rude and inappropriate. That I do apologize for, it was said out of frustration, but that's no excuse.
+Sorry - I didn't want to sound rude or impolite - I'm just wondering what was the reason of this specific solution and if it is still valid to use. 
+@peterblazejewicz It wasn't rude but instead unclear.
+It may seem like I'm being rude, but this is a reproducible issue that is being closed with no fix for "now" being offered.
+@pacoguzman sorry if I seemed rude, it wasn't my point. Of course we'll keep using Rails as well :)
+Thank you so much @rafaelfranca !  And I'm not trying to be rude, :-), I'm just frustrated.
+I don't think you are being rude, your questions are relevant.
+Sorry if pinging is considered rude :blush: .
+Sorry that sounded a bit rude.
+Apologies for my previous rude comment.
+@btford I'm confused how our exchange could be interpreted as rude; that was not my intention. My comment represents an honest assessment of the situation, and I very specifically tried to take a neutral tone. Let's not resort to name-calling.
+@IgorMinar Didn't mean to come off as rude, it's just that this issue was really annoying, and you know as well as I do how often "waiting on a test" is the death status to many pull requests. I spent about a half hour trying to figure out how to test this change, as the function is buried a few levels deep and I didn't really understand Doc at all. Thanks for writing the test!
+Nevertheless, I post gently reminders every couple of months. I even threw up a rant once in the thread (which I regret). But then I realized that being rude doesn't get things faster on this kind of community projects.
+On reflection, I think there is actually a fairly reliable formula for how I react. The more lines of code the more skeptical/rude I become. I think this is regardless of quality. I don't really know the root cause of this. Issues used to bother me like this until I got used to them, so I suspect I need more practice. The only way I know to combat this currently is if I know it's coming. Like if I feel I had some input in the process. Perhaps this is a purely emotional thing, but it is probably a good protocol when writing longer bits of code anyway.
+No worries! My stress threshold is slowly improving, so I'll get used to it :) I just wanted to let you know in case me being stressed temporarily turns into me being more harsh or rude or whatever.
+I'm not trying to be a jerk here.
+Sorry I did something rude!
+I'm afraid my expressions may be rude or hard to read, because I'm not so good at English.
+Thanks for your replies. I hope it wasn't rude to create this pull request.
+How could a pull request be rude? Don't worry, we love pull requests! :)
+@reenberg I had no intention of being rude.
+
+It's human nature to divide into us/them groups, and them == bad. Let's try to rise above that base knee-jerk reactionary type of thinking.  
+@Fishrock123 ... Just pointing out, this is not a very "consensus seeking" attitude. Obviously feel free to continue working on it, but the tone of your response here is bordering on being downright rude and inappropriately dismissive. If you disagree with someone, there are more constructive and far more polite ways to say so.
+@ravi, it is considered rude to delete your comments from the thread, especially when you are tagged and answered adequately. I am reading this thread now and noticed that rather than being appreciative to people who are trying to address your concerns, you instead deleted the comments.
+its kind of rude to state that nobody cares. i just dont get the problem.
+Not to be rude, but isn't that your responsibility?
+By all means open issues and complain about bugs and other imperfections, but that can be done without being flippant and rude.
+If you have *constructive* criticism, keep it coming.

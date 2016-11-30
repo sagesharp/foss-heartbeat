@@ -1,0 +1,73 @@
+@jrieken can you reproduce this by having 3 editors and closing the CENTER one? In that case editor 3 should move to CENTER and that might be another source of fuck up. .
+Ah, yes. Good catch—I started with .brand as a wrapper and said fuck that later on.
+Not trying to be rude, just trying to understand.
+@pokonski and it's a nice display ! I hope I wasn't rude.
+I don't mean to be rude but shouldn't have more ppl access to this? Only 2 guys working on it. Some little changes every few days, the whole world crying for pulls, 200+ issues.
+Not a problem at all and it was not rude.
+No problem. Sorry if I came off rude at all.
+Anyway, hope that helps without me sounding like a defensive asshole—just trying to make sure folks know why we do the things we do :).
+Toggling overflow will start causing the main page to jerk around when opening and closing a modal.
+@ramkumarramaraj "Not working" is vague as fuck.
+Which is a bitch. 
+Ugly code that works > nice looking code that doesn't work.
+Yes, I am claiming you're wrong.
+Maybe my tone came off as a dick, but I assure you straight download doesn't work to drop in the file examples.
+It's a fuck ton of work and we need folks testing, providing feedback, and voicing concerns.
+Well fuck.
+Was hesitant to nuke the other assets, but fuck those things—huge images in the repo doesn't make any sense.
+I hope it will not fuck up anything?
+What the actual fuck.
+We could align by baseline, but that'd fuck with alignment after customization too much.
+3) Notice the fuck up.
+I see no problem—the popover appears on click as it should no matter how fast I fuck around with the hovers.
+Try harder. You really need to fuck with it for half a second or so. Do you want video proof?
+Well, fuck me apparently.
+ignore the node_modules folder is required also some files extension to ignore some jerk osx files....
+Anyway to clean that up or should we just say fuck it? :)
+Not to be rude, just curious.
+Anyone want to own this? If not, I'll say fuck it and pass.
+I would not put a margin on the columns unless the last child has nothing on the bottom but that's a bitch of a complication.
+I know this devolves this thread into something else, but fuck it, let's hash it out because that's the bigger problem here.
+As for underscores, fuck those :grin:.
+Hah, I would have just said fuck it and nuked that subnav for the variable sections all together :D.
+Hah, having just played with Spectrum for something else, fuck that.
+No matter what, this kind of change would fuck shit up for folks.
+That's a fuck ton of bloat right now to have the fallback, so I'd rather not do it until v4 when we drop IE8.
+Was going to try to argue not adding this, but fuck it.
+First and foremost, Windows will not fuck up the rendering of text simply because an uninstalled Helvetica Neue or Helvetica is in the font stack. Here are two screenshots of Safari compared to IE8 and IE9:.
+oh yeah… hrm… it does still really feel wrong to have an option that is essentially fuck accessibility, but your call.
+I'm willing to revisit if someone can demonstrate this doesn't fuck up anything else like previous inline-code hacks.
+Also that'd probably fuck up some folks' stuff given it's a rather large change to make now (so close to v4).
+@mdo +1 fuck the spec
+Should we say fuck the spec and do this? I didn't think about it much when I saw the PR—spec is spec—but this actually might fuck up a lot of folks.
+It's temporary as I fuck with the basic styles there.
+It's my first try at PR's so please don't be rude.
+Maybe you could submit a github issue to rspec-core saying something like "what the fuck is up with should ==" and we can not only have a great conversation about it but maybe we can get everyone tweeting about it too :)
+I hope I do not come across as dumb or a jerk.
+Yup, portability is a bitch with this, we have the same problem with inline-code for cgis in rack.
+tha fuck is this?
+Thankfully @homakov isn't an asshole, but assume he was, he could've done A LOT of damage with automated scripts to GitHub.
+Okay. I have coded and documented the fuck out of this thing. :shipit: /cc @steveklabnik .
+I don’t like breaking shit more than anyone, but imo it’s preferable to break stuff loud and clear, than to have silently corrupt digests that’ll be a bitch to debug (took me a while to find the problem on Basecamp!).
+I'm a jerk and totally forgot to run the tests for this.
+Actually, fuck it.
+That way we don't have to dick around with associations, etc.
+The way it is now it's really a bitch to find out where the problem is when you suddenly get a blank page and nothing works.
+@graphefruit I do not want to be rude, but again, this is not a forum to talk about issues you are having implementing something with angular. This space is to report issues that are present on angular core.
+I'm not asking to change this behavior right now and fuck everybody's application.
+That way nobody would be able to fuck with it :-)
+Creating an issue to ask a simple question is a bit of a dick move, but it occurs to me that if we release with this behaviour, it'll be painful to make go away. :worried: .
+Refer to src/Color.elm in this repo-- the code and terrible (lack of) documentation is there. Evan's knee-jerk closing of #434 and redirection to elm/graphics does not make it any less so.
+I think we should go for 'discoverable' over anything else, but agree that the affordances are going to be a bitch to figure out.
+Option 1 seems fine to me. We don't need a massive chain of revision step-through; mostly it's just for "fuck, the cat walked across the keyboard while I was editing that FAQ and replaced the whole thing with sssssssssssssssssssssss and then managed to save it". 
+(I don't think the difference is a huge deal -- IIRC, we just use the utility functions so the code reads more Englishy -- since it's not like we'd fuck around with changing various statusvizes lest we introduce subtle and exciting bugs that might make the whole site turn into a turnip.)
+Ensures that the Gecko-specific method is always defined ahead of time so QUnit doesn't bitch about it being "created" when running in Firefox etc.
+Humans mess up. Also, if we're cutting releases from the branch, which we haven't been doing, then it will need to be tagged. If you rebased the branch head then you'll leave stranded tags all over. Which requires git to track more commits, and makes things like bisecting a bitch. The code of the release I'm running may not be the same as the one at the new, but same, commit from the latest head.
+But the default c++ compiler of centos 6.5 is the damned g++ 4.4, fuck it.
+I'm currently using this as a workaround. Is it stupid as fuck or should it work?
+Using that pointer you can of course fuck up the internals of Node.js, but it is also very useful since the structure is reference counted
+@timoxley my bad! too many fuck ups for a simple commit.
+I was pinged on this. I agree that llvm is a jerk who makes our lives hard?
+Thanks for the detailed review. I seem to fuck up in git every time I try to rebase!??
+(man, whitespace is a bitch...)
+I totally understand your argument though and I'm not trying to be rude, just letting you know we're taking advantage of the "fuck the other rules pre-1.0" rule while we can.

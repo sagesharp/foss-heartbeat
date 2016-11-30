@@ -1,0 +1,30 @@
+Whoever thought of this stripping logic should seriously rethink their career.
+End of discussion. Fuck your opinions @bpasero I don't care what you think is right and what not. Once again fuck your solution. We all do stuff differently and nobody cares what you think.
+fuck ie6,7.
+fuck ie6.
+Don't just close the pull request with no comment, that's just plain rude.
+Oh for fuck sake stop rabbiting on!!!
+For fuck's sake people, don't you have any work to do?!
+I am well aware that you can hack your way around this and keep saying "nuh uh!" instead of admitting that it's ill conceived and improving, but seriously: making a snippy response like that just makes you look like an immature hipster smarting off to a battle worn professional. @douglascrockford is on the technical committee for fuck's sake.
+Stop being a dick and put a god damn semicolon already, it's the best practice anyway.
+But hey, i guess being a dick about the code you released as open source works too.
+**This is a horrible mentality for web development.**
+My blunt reaction is fuck legacy code and code bloat.
+You've basically said "fuck you" to every developer who utilizes sub menus, fluid layouts.
+Even having to say this is making my blood boil.
+Thanks nextgenthemes, I'll follow your example and be a jerk who can't read code that isn't inserted in an inset gray box and post rude comments when someone tries to help others.
+Best of luck moving forward!
+Excusez-moi for this rude language I use, but I am only concerned that those semantically incorrect frameworks get ahead of your great brainchild project, just because you are allocating time to add unnecessary features, instead of going to the next milestone.
+Yea... fuck the developers, the hundreds of thousands of developers who are dependent on generators, package managers, and other third-party tools: 
+@mdo And again I am the evil rude guy for my honest outspokenness. He has made up his mind anyway and now you give him what he wants, unofficial support and encourage others to use a insecure totally outdated browser ... OMG. Your be super-nice to every stubborn dude is annoying, honestly. It happened b4, nobody is supposed to be a tiny bit rude here. Just accept every stupid decision and even help them out ... no matter if it makes sense or not, just be nice, never question and let them dig their own graves.
+I see people "thumbs-downing" @jeveloper's comment, but I'd like to also say how sick and tired I am of people not paying a dime to use OSS, and then presuming to bitch and moan to maintainers when decisions are made which they disagree with.
+@fxn By putting words in people's mouths, you insult them. Nobody has every said they wanted Ruby to be "like Java" (or like "some imaginary programming language" as you **plainly** accused me of saying when I **never** said any such thing).
+By saying things like "my code" when referring to a project that has over a thousand contributors, you insult **everybody** who has ever contributed to Rails or attempted to contribute to Rails. You're from another country and perhaps English isn't your first language, so maybe you get a little slack on that one.. but please choose your words better if you don't want to seem like you're insulting people.
+By saying "If this pull request were submitted for performance reasons, I would accept it" when you knew you had no intention of doing so, you not only insult everybody's intelligence, but you prove yourself to be a liar because you gave your word that you would do something when you knew full well that you were going to do the exact opposite. Where I come from a man's word is his bond. You gave your word, you should have done what you said you would do. Now, to me (and I'm sure many others) you've lost all credibility.
+By "talking to the core team" about it at a time when the majority of the core team was more than likely in bed asleep or just waking up to start the day (how many did you actually talk to? 3? 4?) and then getting one of those core team members to come in here and close the pull request for you, you insult yourself further, because not only do you look like a liar but now you also look like a coward.
+If you take anything I said as an insult, that's your problem, you **have** insulted me and several other people whether that was your intention or not, and you **did** lie about your intention to merge this pull request and then found someone else to do your dirty work for you when the pull request was submitted. I only speak the truth, nothing more or less, take it how you will.
+If people want to bitch and whine about a long standing "bug" then perhaps they should quit the rant, write some code, and create a PR.
+They already said "fuck you" to the community with Angular 2.0. .
+LLVM is just a jerk.
+@Dave3of5  Ey, stupid, I can laugh at you (at your ignorance and at your lack of capability to understand even the simplest idea) and let you think that you have everything under control.
+But, piece of shit, don't ever dare to insult me when I am present. 
