@@ -2,3 +2,4 @@
 __pycache__
 *.pyc
 empathy-model/empathy-model-[0-9]*
+env
