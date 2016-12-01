@@ -179,7 +179,7 @@ def main():
                 text = scrubFile(json)
                 jsonCount = jsonCount + 1
                 if text:
-                    commentFile.write('#' + json + '\n')
+                    commentFile.write('#' + json + ' . \n')
                     commentFile.write(text)
                     commentFile.write('\n.\n')
                 if (jsonCount != 0 and jsonCount % 5000 == 0):
