@@ -55,6 +55,7 @@
 %s/(2 hardcoding)/(1 hardcoding)/g
 %s/(2 harmful)/(1 harmful)/g
 %s/(2 help)/(4 help)/g
+%s/(2 helps)/(4 helps)/g
 %s/(2 Hopefully)/(3 Hopefully)/g
 %s/(2 hopefully)/(3 hopefully)/g
 %s/(4 honest)/(3 honest)/g
@@ -69,7 +70,7 @@
 %s/(2 issue)/(1 issue)/g
 %s/(2 like)/(3 like)/g
 %s/(3 Looks)/(2 Looks)/g
-%s/(3 luck)/(2 luck)/g
+%s/(2 luck)/(3 luck)/g
 %s/(2 marvellous)/(4 marvellous)/g
 %s/(3 me)/(2 me)/g
 %s/(2 mistake)/(1 mistake)/g
