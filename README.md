@@ -42,7 +42,7 @@ Clone the repository, change to the directory containing the repository.
 $ pip install -r requirements.txt
 ```
 
-May require `sudo`.
+May require `sudo`. If `sudo` fails, try passing the `--user` flag.
 
 ## Install Stanford CoreNLP
 
