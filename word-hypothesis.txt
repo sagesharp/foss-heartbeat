@@ -1,0 +1,57 @@
+Does saying "thanks", "thank you", or "thx" have an impact on whether new contributors come back?
+ - Not for whether they come back once
+ - What about whether they become an "above average" committer?
+
+Step 2: What about issue reporters?
+Step 3: What about for users that are completely new to participating on github?
+
+angular/angular.js
+------------------
+
+Number of first time contributors exposed to word: 1878
+Number of first time contributors exposed to word that contributed again: 507
+Number of first time contributors NOT exposed to word: 8460
+Number of first time contributors NOT exposed to word that contributed again: 2475
+
+Not significant (once I removed comments about the CLAs)
+http://www.evanmiller.org/ab-testing/chi-squared.html#!507/1878;2475/8460@99
+
+twbs/bootstrap
+--------------
+
+Number of first time contributors exposed to word: 1624
+Number of first time contributors exposed to word that contributed again: 545
+Number of first time contributors NOT exposed to word: 8360
+Number of first time contributors NOT exposed to word that contributed again: 2892
+
+Not significant
+http://www.evanmiller.org/ab-testing/chi-squared.html#!545/1624;2892/8360@99
+
+rails/rails
+-----------
+
+Number of first time contributors exposed to word: 3632
+Number of first time contributors exposed to word that contributed again: 1476
+Number of first time contributors NOT exposed to word: 18765
+Number of first time contributors NOT exposed to word that contributed again: 8300
+
+Not being thanked means slightly greater chance of coming back (38.6%-42.8% vs 43.3%-45.2%)
+http://www.evanmiller.org/ab-testing/chi-squared.html#!1476/3632;8300/18765@99
+
+rails/rails (issue reporters)
+-----------------------------
+
+one additional report:
+Number of first time contributors exposed to word: 2027
+Number of first time contributors exposed to word that contributed again: 592
+Number of first time contributors NOT exposed to word: 19207
+Number of first time contributors NOT exposed to word that contributed again: 5729
+
+two additional reports:
+Number of first time contributors exposed to word: 2027
+Number of first time contributors exposed to word that contributed again: 292
+Number of first time contributors NOT exposed to word: 19207
+Number of first time contributors NOT exposed to word that contributed again: 5729
+
+Note the drop off in contributors again. Perhaps maintainers know who is new,
+and they're more likely to be polite and thank them?

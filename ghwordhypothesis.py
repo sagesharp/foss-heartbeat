@@ -88,15 +88,22 @@ def main():
     parser.add_argument('regex', help='word or python regex to search for (MULTILINE is enabled)')
     parser.add_argument('--skip', help='if this python regex is matched, ignore this comment', type=str, default=None)
     parser.add_argument('--num', help='number of contributions that are considered a success', type=int, default=1)
+    parser.add_argument('--reporters', help='intead of looking and PR submitters and reviewers, look at bug reporters and responders', type=bool, default=False)
     args = parser.parse_args()
 
     repoPath = os.path.join(args.owner, args.repository)
     # Grab both merged and not merged pull requests
 
     # PR key (username): [(date, issue directory), ... ]
-    contribDict = createContributionDict(repoPath, ['contributors.txt', 'submitters.txt'])
+    if args.reporters:
+        contribDict = createContributionDict(repoPath, ['reporters.txt'])
+    else:
+        contribDict = createContributionDict(repoPath, ['contributors.txt', 'submitters.txt'])
     # Reviews key (json file path): [(date, user)]
-    reviewDict = createReviewerDict(repoPath, ['reviewers.txt'])
+    if args.reporters:
+        reviewDict = createReviewerDict(repoPath, ['responders.txt'])
+    else:
+        reviewDict = createReviewerDict(repoPath, ['reviewers.txt'])
     # Reviews key (json file path): multiline comment string
     commentDict = createCommentDict(repoPath)
     

@@ -48,7 +48,7 @@ from ghcategorize import jsonIsPullRequest, jsonIsPullRequestComment
 from ghreport import overwritehtml
 
 def issueDir(longerDir):
-    return re.sub(r'(.*issue-[0-9]+).*', '\g<1>', longerDir)
+    return re.sub(r'(.*?issue-[0-9]+).*', '\g<1>', longerDir)
 
 def prOpenTimes(owner, repo):
     repoPath = os.path.join(owner, repo)
