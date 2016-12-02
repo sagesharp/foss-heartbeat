@@ -1,0 +1,16 @@
+name: dev-foss
+channels:
+  - conda-forge
+dependencies:
+  - python == 3.5
+  - github3.py
+  - numpy
+  - plotly
+  - pytz
+  - requests
+  - scipy
+  - six
+  - uritemplate
+  - uritemplate.py
+  - pip:
+    - emoji
