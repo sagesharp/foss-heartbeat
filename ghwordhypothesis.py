@@ -67,9 +67,8 @@ def createReviewerDict(repoPath, fileList):
                  datetime.strptime(x.split('\t')[1], "%Y-%m-%dT%H:%M:%SZ"),
                  x.split('\t')[2])
                 for x in lines if len(x.split('\t')) > 3]
-    contribs = sorted(contribs, key=itemgetter(1))
     for c in contribs:
-        contribDict.setdefault( c[0], [] ).append((c[1], c[2]))
+        contribDict[c[0]] = [(c[1], c[2])]
     return contribDict
 
 def createCommentDict(repoPath):
