@@ -108,7 +108,7 @@ def main():
         reviewDict = createReviewerDict(repoPath, ['reviewers.txt'])
     # Reviews key (json file path): multiline comment string
     commentDict = createCommentDict(repoPath)
-    
+
     thanked = 0
     noThanked = 0
     thankedSuccess = 0
