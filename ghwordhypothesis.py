@@ -114,6 +114,7 @@ def main():
         # Grab the user's first contribution to the project
         firstPR = value[0]
         issueDir = firstPR[1]
+        tflag = False
         for c in [os.path.join(issueDir, x) for x in os.listdir(issueDir)]:
             # Ignore any files where the PR creator commented
             if c not in reviewDict.keys():
@@ -125,13 +126,15 @@ def main():
             if args.skip and re.search(args.skip, comment, flags=re.MULTILINE):
                 continue
             if re.search(args.regex, comment, flags=re.MULTILINE):
-                thanked = thanked + 1
-                if len(value) > args.num:
-                    thankedSuccess = thankedSuccess + 1
-            else:
-                noThanked = noThanked + 1
-                if len(value) > 1:
-                    noThankedSuccess = noThankedSuccess + 1
+                tflag = True
+        if tflag:
+            thanked = thanked + 1
+            if len(value) > args.num:
+                thankedSuccess = thankedSuccess + 1
+        else:
+            noThanked = noThanked + 1
+            if len(value) > args.num:
+                noThankedSuccess = noThankedSuccess + 1
     print("Number of first time contributors exposed to word:", thanked)
     print("Number of first time contributors exposed to word that contributed again:", thankedSuccess)
     print("Number of first time contributors NOT exposed to word:", noThanked)
