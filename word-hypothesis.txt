@@ -5,53 +5,123 @@ Does saying "thanks", "thank you", or "thx" have an impact on whether new contri
 Step 2: What about issue reporters?
 Step 3: What about for users that are completely new to participating on github?
 
-angular/angular.js
-------------------
+# Summary
 
-Number of first time contributors exposed to word: 1878
-Number of first time contributors exposed to word that contributed again: 507
-Number of first time contributors NOT exposed to word: 8460
-Number of first time contributors NOT exposed to word that contributed again: 2475
+## Pull request submitters
 
-Not significant (once I removed comments about the CLAs)
-http://www.evanmiller.org/ab-testing/chi-squared.html#!507/1878;2475/8460@99
+Name			Number		Number		Number Not	Number Not
+			Thanked		Thanked Who	Thanked		Thanked Who
+					Resubmitted			Resubmitted
 
-twbs/bootstrap
---------------
+angular/angular.js	2333		572		352		128
+twbs/bootstrap		1274		370		1294		327
+rails/rails		2502		990		946		438
+servo/servo		638		371		20		16
 
-Number of first time contributors exposed to word: 1624
-Number of first time contributors exposed to word that contributed again: 545
-Number of first time contributors NOT exposed to word: 8360
-Number of first time contributors NOT exposed to word that contributed again: 2892
+# angular/angular.js
 
-Not significant
-http://www.evanmiller.org/ab-testing/chi-squared.html#!545/1624;2892/8360@99
+## Pull request submitters
 
-rails/rails
------------
+Found using the following command line:
+```
+python ../src/ghwordhypothesis.py  angular.js angular '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:'
+```
 
-Number of first time contributors exposed to word: 3632
-Number of first time contributors exposed to word that contributed again: 1476
-Number of first time contributors NOT exposed to word: 18765
-Number of first time contributors NOT exposed to word that contributed again: 8300
+Number of first time contributors exposed to word: 2333
+Number of first time contributors exposed to word that contributed again: 572
+Number of first time contributors NOT exposed to word: 352
+Number of first time contributors NOT exposed to word that contributed again: 128
 
-Not being thanked means slightly greater chance of coming back (38.6%-42.8% vs 43.3%-45.2%)
-http://www.evanmiller.org/ab-testing/chi-squared.html#!1476/3632;8300/18765@99
+## Issue reporters
 
-rails/rails (issue reporters)
------------------------------
+Found using the following command line:
+```
+python ../src/ghwordhypothesis.py  angular.js angular '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:' --reporters 1
+```
 
-one additional report:
-Number of first time contributors exposed to word: 2027
-Number of first time contributors exposed to word that contributed again: 592
-Number of first time contributors NOT exposed to word: 19207
-Number of first time contributors NOT exposed to word that contributed again: 5729
+Number of first time contributors exposed to word: 1189
+Number of first time contributors exposed to word that contributed again: 251
+Number of first time contributors NOT exposed to word: 3504
+Number of first time contributors NOT exposed to word that contributed again: 724
 
-two additional reports:
-Number of first time contributors exposed to word: 2027
-Number of first time contributors exposed to word that contributed again: 292
-Number of first time contributors NOT exposed to word: 19207
-Number of first time contributors NOT exposed to word that contributed again: 5729
+# twbs/bootstrap
 
-Note the drop off in contributors again. Perhaps maintainers know who is new,
-and they're more likely to be polite and thank them?
+## Pull request submitters
+
+Found using the following command line:
+```
+python ../src/ghwordhypothesis.py  bootstrap twbs '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:'
+```
+
+Number of first time contributors exposed to word: 1274
+Number of first time contributors exposed to word that contributed again: 370
+Number of first time contributors NOT exposed to word: 1294
+Number of first time contributors NOT exposed to word that contributed again: 327
+
+## Issue reporters
+
+Found using the following command line:
+```
+python ../src/ghwordhypothesis.py  bootstrap twbs '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:' --reporters 1
+```
+
+Number of first time contributors exposed to word: 1840
+Number of first time contributors exposed to word that contributed again: 376
+Number of first time contributors NOT exposed to word: 6435
+Number of first time contributors NOT exposed to word that contributed again: 1334
+
+# rails/rails
+
+## Pull request submitters
+
+Found using the following command line:
+```
+python ../src/ghwordhypothesis.py rails rails '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:'
+```
+
+Number of first time contributors exposed to word: 2502
+Number of first time contributors exposed to word that contributed again: 990
+Number of first time contributors NOT exposed to word: 946
+Number of first time contributors NOT exposed to word that contributed again: 438
+
+## Issue reporters
+
+Found using the following command line:
+```
+python ../src/ghwordhypothesis.py rails rails '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:' --reporters 1
+```
+
+Number of first time contributors exposed to word: 2051
+Number of first time contributors exposed to word that contributed again: 574
+Number of first time contributors NOT exposed to word: 2732
+Number of first time contributors NOT exposed to word that contributed again: 721
+
+# servo/servo
+
+The servo community was/is using a separate website to review pull requests.
+It's called "Critic", so I've excluded any comments by community members
+telling people to go look at Critic.
+
+## Pull request submitters
+
+Found with the following command line:
+
+```
+python ../src/ghwordhypothesis.py servo servo '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:|[Cc]ritic'
+```
+
+Number of first time contributors exposed to word: 638
+Number of first time contributors exposed to word that contributed again: 371
+Number of first time contributors NOT exposed to word: 20
+Number of first time contributors NOT exposed to word that contributed again: 16
+
+## Issue submitters
+
+```
+python ../src/ghwordhypothesis.py servo servo '[tT]hanks?|[tT]hx|[Gg]ood[Gg]reat|:smile:|:+1:|[Cc]ritic' --reporters 1
+```
+
+Number of first time contributors exposed to word: 155
+Number of first time contributors exposed to word that contributed again: 35
+Number of first time contributors NOT exposed to word: 431
+Number of first time contributors NOT exposed to word that contributed again: 169
