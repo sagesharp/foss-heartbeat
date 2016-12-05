@@ -117,6 +117,7 @@ def main():
         firstPR = value[0]
         issueDir = firstPR[1]
         tflag = False
+        reviewComments = 0
         for c in [os.path.join(issueDir, x) for x in os.listdir(issueDir)]:
             # Ignore any files where the PR creator commented
             if c not in reviewDict.keys():
@@ -124,6 +125,7 @@ def main():
             if c not in commentDict.keys():
                 print("WARN", c, "not in all-comments.txt")
                 continue
+            reviewComments = reviewComments + 1
             comment = commentDict[c]
             if args.skip and re.search(args.skip, comment, flags=re.MULTILINE):
                 continue
@@ -134,6 +136,12 @@ def main():
             if len(value) > args.num:
                 thankedSuccess = thankedSuccess + 1
         else:
+            # Skip any issues where no one but the submitter commented.
+            # This could be because the submitter closed it.
+            if not reviewComments:
+                if args.printmissing:
+                    print("Issue with no comments:", issueDir)
+                continue
             noThanked = noThanked + 1
             if len(value) > args.num:
                 noThankedSuccess = noThankedSuccess + 1
