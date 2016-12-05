@@ -137,6 +137,11 @@ def main():
             if len(value) > args.num:
                 thankedSuccess = thankedSuccess + 1
         else:
+            if args.printmissing:
+                for c in [os.path.join(issueDir, x) for x in os.listdir(issueDir)]:
+                    if c not in reviewDict.keys() or c not in commentDict.keys():
+                        continue
+                    print(commentDict[c])
             # Skip any issues where no one but the submitter commented.
             # This could be because the submitter closed it.
             if not reviewComments:
@@ -150,6 +155,8 @@ def main():
                         with open(os.path.join(issueDir, jsonFile)) as issueFile:
                             issueJson = json.load(issueFile)
                 if issueJson['state'] ==  'open':
+                    if args.printmissing:
+                        print("Issue still open:", issueDir)
                         continue
             noThanked = noThanked + 1
             if len(value) > args.num:
