@@ -88,6 +88,8 @@ def main():
     parser.add_argument('--skip', help='if this python regex is matched, ignore this comment', type=str, default=None)
     parser.add_argument('--num', help='number of contributions that are considered a success', type=int, default=1)
     parser.add_argument('--reporters', help='intead of looking and PR submitters and reviewers, look at bug reporters and responders', type=bool, default=False)
+    parser.add_argument('--printmissing', help="print issues where contributors didn't experience the word", type=bool, default=False)
+    parser.add_argument('--skipopen', help="don't count any issues or pull requests that are still open", type=bool, default=False)
     args = parser.parse_args()
 
     repoPath = os.path.join(args.owner, args.repository)
