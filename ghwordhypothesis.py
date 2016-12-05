@@ -35,6 +35,7 @@ from ghstats import issueDir
 from operator import itemgetter
 import os
 import re
+import json
 import argparse
 from datetime import datetime
 
@@ -142,6 +143,14 @@ def main():
                 if args.printmissing:
                     print("Issue with no comments:", issueDir)
                 continue
+            # Skip any issues that have comments but are still open.
+            if args.skipopen:
+                for jsonFile in os.listdir(issueDir):
+                    if jsonFile.startswith('issue-'):
+                        with open(os.path.join(issueDir, jsonFile)) as issueFile:
+                            issueJson = json.load(issueFile)
+                if issueJson['state'] ==  'open':
+                        continue
             noThanked = noThanked + 1
             if len(value) > args.num:
                 noThankedSuccess = noThankedSuccess + 1
