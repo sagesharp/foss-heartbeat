@@ -1,29 +1,65 @@
+%s/(2 \(:-RRB-\))/(3 \1)/gi
+%s/(2 \(:--RRB-\))/(3 \1)/gi
+%s/(2 \(:o-RRB-\))/(3 \1)/gi
+%s/(2 \(;-RRB-\))/(3 \1)/gi
+%s/(2 \(;--RRB-\))/(3 \1)/gi
+%s/(2 \(=-RRB-\))/(3 \1)/gi
+%s/(2 \(=--RRB-\))/(3 \1)/gi
+%s/(2 \(:D\))/(3 \1)/gi
+%s/(2 \(^_^\))/(3 \1)/gi
+%s/(2 \(+1\))/(3 \1)/gi
+%s/(2 \(:100\))/(3 \1)/gi
+%s/(3 \(add\))/(2 \1)/gi
+%s/(3 \(adding\))/(2 \1)/gi
+%s/(2 \(advice\))/(4 \1)/gi
+%s/(2 \((2 your) (4 advice)\))/(3 \1)/gi
+%s/(2 \((2 the) (4 advice)\))/(3 \1)/gi
+%s/(3 \(adding\))/(2 \1)/gi
 %s/(2 \(anus\))/(0 \1)/gi
+%s/(3 \(any\))/(2 \1)/gi
+%s/(2 \(appreciated\))/(3 \1)/gi
 %s/(2 \(approved\))/(3 \1)/gi
 %s/(2 \(attitude\))/(1 \1)/gi
+%s/(3 \(awesome\))/(4 \1)/gi
 %s/(0 \(bad\))/(1 \1)/gi
+%s/(3 \(batch\))/(2 \1)/gi
 %s/(4 \(best\))/(3 \1)/gi
 %s/(4 \(better\))/(3 \1)/gi
 %s/(2 \(bitch\))/(0 \1)/gi
 %s/(2 \(bitching\))/(0 \1)/gi
 %s/(2 \(blocker\))/(1 \1)/gi
+%s/(2 \(blue_heart\))/(4 \1)/gi
 %s/(2 \(break\))/(1 \1)/gi
 %s/(2 \(breaking\))/(1 \1)/gi
 %s/(2 \(breakage\))/(1 \1)/gi
+%s/(2 \(brilliant\))/(4 \1)/gi
 %s/(2 \(broken\))/(1 \1)/gi
 %s/(2 \(bug\))/(1 \1)/gi
 %s/(2 \(buggy\))/(1 \1)/gi
 %s/(2 \(bugs\))/(1 \1)/gi
 %s/(3 \(biggest\))/(2 \1)/gi
+%s/(2 (2 champagne) (2 :))/(3 (3 champagne) (2 :))/gi
 %s/(3 \(check\))/(2 \1)/gi
-%s/(2 \(community\))/(3 \1)/gi
+%s/(2 \(cheers\))/(3 \1)/gi
+%s/(2 (2 clap) (2 :))/(3 (3 clap) (2 :))/gi
 %s/(2 \(clearer\))/(3 \1)/gi
 %s/(2 \(clear\))/(3 \1)/gi
+%s/(3 \(comes\))/(2 \1)/gi
+%s/(2 \(community\))/(3 \1)/gi
+%s/(3 \(complex\))/(2 \1)/gi
+%s/(2 (2 confetti_ball) (2 :))/(3 (3 confetti_ball) (2 :))/gi
+%s/(2 \(congrats\))/(3 \1)/gi
+%s/(2 \(grats\))/(3 \1)/gi
+%s/(2 \(congratulations\))/(3 \1)/gi
 %s/(2 \(consistently\))/(3 \1)/gi
 %s/(2 \(consistent\))/(3 \1)/gi
+%s/(2 \(content\))/(3 \1)/gi
+%s/(2 \(contribution\))/(3 \1)/gi
+%s/(2 \((2 your) (3 contribution)\))/(3 \1)/gi
+%s/(2 \(contribute\))/(3 \1)/gi
+%s/(2 \((2 to) (3 contribute)\))/(3 \1)/gi
+%s/(3 \(cool\))/(4 \1)/gi
 %s/(3 \(content\))/(2 \1)/gi
-%s/(3 \(comes\))/(2 \1)/gi
-%s/(3 \(complex\))/(2 \1)/gi
 %s/(2 \(correct\))/(3 \1)/gi
 %s/(2 \(crazy\))/(1 \1)/gi
 %s/(3 \(defined\))/(2 \1)/gi
@@ -35,6 +71,13 @@
 %s/(3 \(disagree\))/(1 \1)/gi
 %s/(1 \(dupe\))/(2 \1)/gi
 %s/(2 \(d'oh\))/(1 \1)/gi
+%s/(2 \(eagerly\))/(3 \1)/gi
+%s/(2 \(encouragement\))/(4 \1)/gi
+%s/(2 \((2 your) (4 encouragement)\))/(3 \1)/gi
+%s/(3 \(eric\))/(2 \1)/gi
+%s/(2 \(explanation\))/(3 \1)/gi
+%s/(1 \(explicit\))/(2 \1)/gi
+%s/(2 \(excellent\))/(4 \1)/gi
 %s/(2 \(exception\))/(1 \1)/gi
 %s/(2 \(exceptions\))/(1 \1)/gi
 %s/(1 \(expected\))/(2 \1)/gi
@@ -43,22 +86,40 @@
 %s/(2 \(feature\))/(3 \1)/gi
 %s/(0 \(fails\))/(1 \1)/gi
 %s/(2 \(failed\))/(1 \1)/gi
+%s/(3 \(fantastic\))/(4 \1)/gi
+%s/(2 (2 fireworks) (2 :))/(3 (3 fireworks) (2 :))/gi
 %s/(2 \(fixing\))/(3 \1)/gi
 %s/(2 \(fix\))/(3 \1)/gi
 %s/(2 \(fixed\))/(3 \1)/gi
 %s/(2 \(fixes\))/(3 \1)/gi
+%s/(2 \(four_leaf_clover\))/(3 \1)/gi
+%s/(3 \(forgot\))/(2 \1)/gi
 %s/(3 \(free\))/(2 \1)/gi
 %s/(4 \(fresh\))/(2 \1)/gi
 %s/(2 \(fuck\))/(0 \1)/gi
 %s/(2 \(fucking\))/(0 \1)/gi
 %s/(3 \(full\))/(2 \1)/gi
 %s/(1 \(generic\))/(2 \1)/gi
+%s/(3 \(got\))/(2 \1)/gi
 %s/(2 \(glad\))/(3 \1)/gi
+%s/(2 \(green_heart\))/(4 \1)/gi
+%s/(4 \(great\))/(3 \1)/gi
 %s/(2 \(grr\))/(1 \1)/gi
 %s/(2 \(hardcoding\))/(1 \1)/gi
 %s/(2 \(harmful\))/(1 \1)/gi
 %s/(2 \(help\))/(4 \1)/gi
+%s/(2 \(helping\))/(4 \1)/gi
 %s/(2 \(helps\))/(4 \1)/gi
+%s/(2 \((2 to) (4 help)\))/(3 \1)/gi
+%s/(2 \((2 of) (4 help)\))/(3 \1)/gi
+%s/(2 \((2 your) (4 help)\))/(3 \1)/gi
+%s/(2 \((2 the) (4 help)\))/(3 \1)/gi
+%s/(2 \(heart\))/(4 \1)/gi
+%s/(2 \(heart_eyes\))/(4 \1)/gi
+%s/(2 \(heart_eyes_cat\))/(4 \1)/gi
+%s/(3 \(hit\))/(2 \1)/gi
+%s/(3 \(hooked\))/(2 \1)/gi
+%s/(2 \(hooray\))/(4 \1)/gi
 %s/(2 \(hopefully\))/(3 \1)/gi
 %s/(4 \(honest\))/(3 \1)/gi
 %s/(2 \(ignorance\))/(1 \1)/gi
@@ -66,30 +127,64 @@
 %s/(2 \(improvement\))/(3 \1)/gi
 %s/(2 \(improved\))/(3 \1)/gi
 %s/(0 \(impossible\))/(1 \1)/gi
+%s/(2 \(incorrect\))/(1 \1)/gi
+%s/(3 \(innocent\))/(2 \1)/gi
 %s/(2 \(insights\))/(3 \1)/gi
 %s/(3 \(insulted\))/(1 \1)/gi
-%s/(2 \(incorrect\))/(1 \1)/gi
 %s/(2 \(in-tree\))/(3 \1)/gi
 %s/(2 \(issue\))/(1 \1)/gi
+%s/(2 \(issues\))/(1 \1)/gi
+%s/(2 \(joy_cat\))/(4 \1)/gi
+%s/(2 \(kissing_cat\))/(4 \1)/gi
+%s/(2 \(kissing_closed_eyes\))/(4 \1)/gi
+%s/(2 \(kissing_heart\))/(4 \1)/gi
+%s/(2 \(kissing_smiling_eyes\))/(4 \1)/gi
 %s/(2 \(like\))/(3 \1)/gi
+%s/(1 \(list\))/(2 \1)/gi
 %s/(3 \(looks\))/(2 \1)/gi
+%s/(2 \(lgtm\))/(3 \1)/gi
+%s/(2 \(love_letter\))/(4 \1)/gi
+%s/(2 \(loving\))/(3 \1)/gi
 %s/(2 \(luck\))/(3 \1)/gi
 %s/(2 \(marvellous\))/(4 \1)/gi
 %s/(3 \(me\))/(2 \1)/gi
 %s/(2 \(mistake\))/(1 \1)/gi
 %s/(3 \(moment\))/(2 \1)/gi
 %s/(2 \(okay\))/(3 \1)/gi
+%s/(2 \(ok\))/(3 \1)/gi
+%s/(2 \(ok_hand\))/(3 \1)/gi
+%s/(2 \(ok_woman\))/(3 \1)/gi
 %s/(1 \(out\))/(2 \1)/gi
 %s/(2 \(nah\))/(1 \1)/gi
-%s/(2 \(nope\))/(1 \1)/gi
-%s/(2 \(noobs\))/(1 \1)/gi
+%s/(2 \(neat\))/(3 \1)/gi
 %s/(3 \(new\))/(2 \1)/gi
 %s/(2 \(never\))/(1 \1)/gi
+%s/(2 \(nice\))/(3 \1)/gi
+%s/(2 \(nicer\))/(3 \1)/gi
+%s/(2 \(nit\))/(1 \1)/gi
+%s/(2 \(nitpick\))/(1 \1)/gi
+%s/(2 \(nope\))/(1 \1)/gi
+%s/(2 \((1 no) (2 worries)\)/(3 \1)/gi
+%s/(2 \(noobs\))/(1 \1)/gi
+%s/(3 \(open\))/(2 \1)/gi
 %s/(2 \(pain\))/(1 \1)/gi
 %s/(2 \(painful\))/(1 \1)/gi
+%s/(2 \(party_popper\))/(4 \1)/gi
 %s/(2 \(passes\))/(3 \1)/gi
+%s/(2 \(patient\))/(3 \1)/gi
+%s/(2 \((2 your) (3 patience)\))/(3 \1)/gi
+%s/(2 \(perfect\))/(3 \1)/gi
+%s/(4 \(perfect\))/(3 \1)/gi
+%s/(2 \(pleasure\))/(3 \1)/gi
+%s/(4 \(pleasant\))/(3 \1)/gi
 %s/(4 \(pretty\))/(2 \1)/gi
+%s/(2 \(problems\))/(1 \1)/gi
+%s/(3 \(promise\))/(2 \1)/gi
 %s/(4 \(pure\))/(2 \1)/gi
+%s/(2 \(purple_heart\))/(4 \1)/gi
+%s/(3 \(python\))/(2 \1)/gi
+%s/(2 \(raised_hands\))/(4 \1)/gi
+%s/(2 \(revolving_hearts\))/(4 \1)/gi
 %s/(2 \(regression\))/(1 \1)/gi
 %s/(2 \(relevant\))/(3 \1)/gi
 %s/(2 \(respectfully\))/(3 \1)/gi
@@ -98,19 +193,49 @@
 %s/(2 \(reviewer\))/(3 \1)/gi
 %s/(2 \(review\))/(3 \1)/gi
 %s/(4 \(recommended\))/(3 \1)/gi
+%s/(2 \(rock\))/(3 \1)/gi
+%s/(2 \(rocks\))/(3 \1)/gi
+%s/(2 \((2 ship) (2 it))\)/(3 \1/gi
 %s/(2 \(shitty\))/(1 \1)/gi
 %s/(2 \(shitting\))/(1 \1)/gi
+%s/(2 \(simple_smile\))/(3 \1)/gi
+%s/(2 \(smile_cat\))/(3 \1)/gi
+%s/(4 \(smile\))/(3 \1)/gi
+%s/(2 \(smiley\))/(3 \1)/gi
+%s/(2 \(smiling_cat_face_with_open_mouth\))/(3 \1)/gi
+%s/(2 \(solves\))/(3 \1)/gi
+%s/(2 \(sparkling_heart\))/(4 \1)/gi
 %s/(3 \(special\))/(2 \1)/gi
 %s/(3 \(spot\))/(2 \1)/gi
+%s/(2 \(star\))/(3 \1)/gi
+%s/(3 \(starting\))/(2 \1)/gi
 %s/(3 \(strongly\))/(2 \1)/gi
+%s/(3 \(sweet\))/(4 \1)/gi
 %s/(1 \(sub\))/(2 \1)/gi
+%s/(2 \(suggestion\))/(4 \1)/gi
+%s/(2 \((2 your) (4 suggestion)\))/(3 \1)/gi
+%s/(2 \((2 the) (4 suggestion)\))/(3 \1)/gi
+%s/(2 \(support\))/(4 \1)/gi
 %s/(2 \(sure\))/(3 \1)/gi
+%s/(2 (2 tada) (2 :))/(3 (3 tada) (2 :))/gi
+%s/(2 \(tada\))/(3 \1)/gi
 %s/(2 \(test\))/(3 \1)/gi
 %s/(2 \(tests\))/(3 \1)/gi
+%s/(2 \(thank\))/(3 \1)/gi
 %s/(2 \(thanks\))/(3 \1)/gi
+%s/(2 \(thx\))/(3 \1)/gi
 %s/(2 \(thankfully\))/(3 \1)/gi
+%s/(2 \(thumbsup\))/(3 \1)/gi
+%s/(2 \(thumbs_up_sign\))/(3 \1)/gi
+%s/(2 \(tip\))/(4 \1)/gi
+%s/(2 \((2 your) (4 tip)\))/(3 \1)/gi
+%s/(2 \((2 the) (4 tip)\))/(3 \1)/gi
+%s/(3 \(touch\))/(2 \1)/gi
+%s/(2 \(tough\))/(1 \1)/gi
+%s/(2 \(sparkling_heart\))/(4 \1)/gi
 %s/(2 \(triage\))/(3 \1)/gi
 %s/(2 \(tutorial\))/(3 \1)/gi
+%s/(2 \(two_hearts\))/(4 \1)/gi
 %s/(2 \(twat\))/(0 \1)/gi
 %s/(2 \(unfortunate\))/(1 \1)/gi
 %s/(2 \(undefined\))/(1 \1)/gi
@@ -127,7 +252,17 @@
 %s/(1 \(whatever\))/(2 \1)/gi
 %s/(3 \(well\))/(2 \1)/gi
 %s/(2 \(welcome\))/(3 \1)/gi
+%s/(2 \(wink\))/(3 \1)/gi
+%s/(2 \([w][o0][o0][t]\))/(4 \1)/gi
+%s/(3 \(wonderful\))/(4 \1)/gi
 %s/(2 \(works\))/(3 \1)/gi
 %s/(2 \(waiting\))/(1 \1)/gi
 %s/(2 \(WONTFIX\))/(1 \1)/gi
+%s/(2 \(yay\))/(4 \1)/gi
+%s/(2 \(yea\))/(3 \1)/gi
+%s/(2 \(yeah\))/(3 \1)/gi
+%s/(2 \(yep\))/(3 \1)/gi
+%s/(2 \(yellow_heart\))/(4 \1)/gi
 %s/(2 \(yes\))/(3 \1)/gi
+%s/(2 \(yep\))/(3 \1)/gi
+%s/(2 \(yup\))/(3 \1)/gi
