@@ -258,3 +258,80 @@ $ java -cp stanford-corenlp.jar -Djava.ext.dirs=lib:liblocal -mx5g \
     -file path/to/owner/repo/all-comments.txt > \
     path/to/owner/repo/all-comments.empathy.txt
 ```
+
+### Modifying the sentiment training data
+
+In order to retrain the sentiment model, you need to add parsed sentences with
+Penn tree sentiment for each word. You'll need to add about 1 sentence to
+`empathy/dev.txt` for every 8 similar sentences you add to `empathy/train.txt`.
+
+Penn tree sentence format initially looks very strange:
+
+```
+(4 (2 Again) (4 (2 this) (4 (4 (2 is) (4 (4 super) (3 (3 great) (2 work)))) (2 .))))
+```
+
+Each word, and each combined sentence part has an associated sentiment, from 0
+to 4.  In the empathy model, the following categorizations are used:
+
+ - 4 (Very positive): Thank yous with emphasis (*great* or great!), or specific praise
+ - 3 (Positive): Thanks, praise, encouragement, empathy, helping others, and apologies
+ - 2 (Neutral): Any talk about code that includes opinions without expressing gratitude, empathy, cursing, or discriminatory language
+ - 1 (Negative): Comments about code or people with mild cursing or abelist language
+ - 0 (Very Negative): Comments with strong cursing, sexist, racist, homophobic, transphobic, etc language
+
+It can sometimes be easier to see how sentence sentiment changes as its parsed
+phrases are combined, by putting it in a tree format:
+
+```
+(4
+   (2 Again)
+   (4
+      (2 this)
+      (4
+         (4
+            (2 is)
+            (4
+               (4 super)
+               (3
+                  (3 great)
+                  (2 work))))
+         (2 .))))
+```
+
+There's a [good visualation tool by the Standford CoreNLP
+developers](http://nlp.stanford.edu:8080/sentiment/rntnDemo.html), but is it not
+open source and uses the default sentiment model trained on movie reviews.
+
+#### Vim Tips and Tricks
+
+In order for people to better "see" the sentiment in Penn tree text files, you
+can use [this vim plugin to highlight the sentiment
+labels](http://vim.wikia.com/wiki/Highlight_multiple_words).  You'll need to
+modify the plugins/highlight.csv files to have the following lines:
+
+```
+6,black,yellow,black,yellow
+7,white,DarkRed,white,firebrick
+8,white,DarkGreen,white,DarkGreen
+9,white,DarkBlue,white,DarkSlateBlue
+```
+
+When you open a Penn tree file, you can run the following commands to highlight
+sentiment:
+
+```
+Highlight 7 0
+Highlight 6 1
+Highlight 9 3
+Highlight 8 4
+```
+
+Most open source code talk is neutral, so I don't bother to highlight the 2
+sentiment.
+
+Additionally, when comparing the sentiment results from two different models,
+it's useful to have vimdiff only highlight the individual words (or in our
+case, the sentiment labels) that have changed, rather than highlighting the
+whole line.  [This vim plugin highlights only changed words when vim is in diff
+mode.](https://github.com/rickhowe/diffchar.vim)
