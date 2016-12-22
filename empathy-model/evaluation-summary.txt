@@ -1,0 +1,43 @@
+EVALUATION SUMMARY
+Tested 483 labels
+  324 correct
+  159 incorrect
+  0.670807 accuracy
+Tested 27 roots
+  8 correct
+  19 incorrect
+  0.296296 accuracy
+Label confusion matrix
+      Guess/Gold       0       1       2       3       4    Marg. (Guess)
+               0       2       3       0       7       1      13
+               1       2      23      37      25       4      91
+               2       5      23     293      30      19     370
+               3       0       0       3       3       0       6
+               4       0       0       0       0       3       3
+    Marg. (Gold)       9      49     333      65      27
+
+               0        prec=0.15385, recall=0.22222, spec=0.97679, f1=0.18182
+               1        prec=0.25275, recall=0.46939, spec=0.84332, f1=0.32857
+               2        prec=0.79189, recall=0.87988, spec=0.48667, f1=0.83357
+               3        prec=0.5, recall=0.04615, spec=0.99282, f1=0.08451
+               4        prec=1, recall=0.11111, spec=1, f1=0.2
+Root label confusion matrix
+      Guess/Gold       0       1       2       3       4    Marg. (Guess)
+               0       0       0       0       2       0       2
+               1       0       5       0       6       0      11
+               2       0       3       3       5       3      14
+               3       0       0       0       0       0       0
+               4       0       0       0       0       0       0
+    Marg. (Gold)       0       8       3      13       3
+
+               0        prec=0, recall=n/a, spec=0.92593, f1=n/a
+               1        prec=0.45455, recall=0.625, spec=0.68421, f1=0.52632
+               2        prec=0.21429, recall=1, spec=0.54167, f1=0.35294
+               3        prec=n/a, recall=0, spec=1, f1=n/a
+               4        prec=n/a, recall=0, spec=1, f1=n/a
+Approximate Negative label accuracy: 0.517241
+Approximate Positive label accuracy: 0.065217
+Combined approximate label accuracy: 0.240000
+Approximate Negative root label accuracy: 0.625000
+Approximate Positive root label accuracy: 0.000000
+Combined approximate root label accuracy: 0.208333
