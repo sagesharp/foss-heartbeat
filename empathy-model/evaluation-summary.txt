@@ -1,43 +1,43 @@
 EVALUATION SUMMARY
-Tested 483 labels
-  324 correct
-  159 incorrect
-  0.670807 accuracy
-Tested 27 roots
-  8 correct
-  19 incorrect
-  0.296296 accuracy
+Tested 2255 labels
+  1326 correct
+  929 incorrect
+  0.588027 accuracy
+Tested 115 roots
+  9 correct
+  106 incorrect
+  0.078261 accuracy
 Label confusion matrix
       Guess/Gold       0       1       2       3       4    Marg. (Guess)
-               0       2       3       0       7       1      13
-               1       2      23      37      25       4      91
-               2       5      23     293      30      19     370
-               3       0       0       3       3       0       6
-               4       0       0       0       0       3       3
-    Marg. (Gold)       9      49     333      65      27
+               0       2       2      19      51      22      96
+               1       1      34     185     211      45     476
+               2       6      22    1266     267      61    1622
+               3       0       0      22      21       0      43
+               4       0       0       0      15       3      18
+    Marg. (Gold)       9      58    1492     565     131
 
-               0        prec=0.15385, recall=0.22222, spec=0.97679, f1=0.18182
-               1        prec=0.25275, recall=0.46939, spec=0.84332, f1=0.32857
-               2        prec=0.79189, recall=0.87988, spec=0.48667, f1=0.83357
-               3        prec=0.5, recall=0.04615, spec=0.99282, f1=0.08451
-               4        prec=1, recall=0.11111, spec=1, f1=0.2
+               0        prec=0.02083, recall=0.22222, spec=0.95815, f1=0.0381
+               1        prec=0.07143, recall=0.58621, spec=0.79882, f1=0.12734
+               2        prec=0.78052, recall=0.84853, spec=0.53342, f1=0.8131
+               3        prec=0.48837, recall=0.03717, spec=0.98698, f1=0.06908
+               4        prec=0.16667, recall=0.0229, spec=0.99294, f1=0.04027
 Root label confusion matrix
       Guess/Gold       0       1       2       3       4    Marg. (Guess)
-               0       0       0       0       2       0       2
-               1       0       5       0       6       0      11
-               2       0       3       3       5       3      14
+               0       0       0       3       9      12      24
+               1       0       7       1      37      22      67
+               2       0       1       2       9      12      24
                3       0       0       0       0       0       0
                4       0       0       0       0       0       0
-    Marg. (Gold)       0       8       3      13       3
+    Marg. (Gold)       0       8       6      55      46
 
-               0        prec=0, recall=n/a, spec=0.92593, f1=n/a
-               1        prec=0.45455, recall=0.625, spec=0.68421, f1=0.52632
-               2        prec=0.21429, recall=1, spec=0.54167, f1=0.35294
+               0        prec=0, recall=n/a, spec=0.7913, f1=n/a
+               1        prec=0.10448, recall=0.875, spec=0.43925, f1=0.18667
+               2        prec=0.08333, recall=0.33333, spec=0.79817, f1=0.13333
                3        prec=n/a, recall=0, spec=1, f1=n/a
                4        prec=n/a, recall=0, spec=1, f1=n/a
-Approximate Negative label accuracy: 0.517241
-Approximate Positive label accuracy: 0.065217
-Combined approximate label accuracy: 0.240000
-Approximate Negative root label accuracy: 0.625000
+Approximate Negative label accuracy: 0.582090
+Approximate Positive label accuracy: 0.056034
+Combined approximate label accuracy: 0.102228
+Approximate Negative root label accuracy: 0.875000
 Approximate Positive root label accuracy: 0.000000
-Combined approximate root label accuracy: 0.208333
+Combined approximate root label accuracy: 0.064220
