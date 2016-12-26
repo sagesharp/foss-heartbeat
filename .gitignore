@@ -1,5 +1,5 @@
 *.swp
 __pycache__
 *.pyc
-empathy-model/empathy-model-[0-9]*
+empathy-model/*[0-9]*.ser.gz
 env
