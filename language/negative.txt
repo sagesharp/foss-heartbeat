@@ -1,0 +1,124 @@
+abrasive
+accusatory
+aggressive(?! optimizations?|mode)
+anger
+arrogance
+arrogant
+arse
+ass
+asses
+asshat
+asshole
+arsehole
+attitude
+bad taste
+bastard
+berating
+bitch
+bitches
+bitchy
+blunt
+bollocks
+brevity
+bullshit
+called you out
+calling you out
+calm down
+childish
+chill out
+civil
+civilized
+clusterfuck
+cock
+code of conduct
+condescending
+constructive
+courteous
+cracker
+crap
+cum
+cunt
+curse
+damn
+degrade
+degrading
+defensive
+dick
+dickish
+dick-ish
+discourse
+dismissive
+disrespect
+disrespectful
+dissent
+douche
+douchebag
+drama
+dumbass
+emotional
+fallacy
+flame
+flamewar
+flippant
+friendlier
+more friendly
+frustrated
+frustration
+fuck
+fucked
+fucker
+fuckin
+fucking
+fucks
+fuckup
+goddamn
+goddamned
+goddamnit
+harsh
+ho
+hoe
+hostile
+ignorance
+immature
+impolite
+incident
+inflammatory
+insult
+insulting
+jackass
+jerk
+jerks
+knee-jerk
+moderation
+moderator
+moderators
+off topic
+out of hand
+out of line
+name-calling
+nonesense
+not appropriate
+not nice
+not welcome
+personal attacks?
+piss
+pissed
+rant
+ridiculous
+RTFM
+rude
+scared away
+scumbags
+scum
+(?<!the )sentiment
+shit
+shitty
+shitting
+snarky
+temper
+tone
+totalitarian
+toxic
+unhelpful
+unprofessional
+wtf
