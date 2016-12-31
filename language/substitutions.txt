@@ -9,12 +9,16 @@
 %s/(2 \(^_^\))/(3 \1)/gi
 %s/(2 \(+1\))/(3 \1)/gi
 %s/(2 \(:100\))/(3 \1)/gi
+%s/(2 \(ack\))/(3 \1)/gi
 %s/(3 \(add\))/(2 \1)/gi
 %s/(3 \(adding\))/(2 \1)/gi
+%s/(2 \(advantage\))/(3 \1)/gi
+%s/(2 \(advantages\))/(3 \1)/gi
 %s/(2 \(advice\))/(4 \1)/gi
 %s/(2 \((2 your) (4 advice)\))/(3 \1)/gi
 %s/(2 \((2 the) (4 advice)\))/(3 \1)/gi
 %s/(3 \(adding\))/(2 \1)/gi
+%s/(2 \(answer\))/(3 \1)/gi
 %s/(2 \(anus\))/(0 \1)/gi
 %s/(3 \(any\))/(2 \1)/gi
 %s/(2 \(appreciated\))/(3 \1)/gi
@@ -28,8 +32,12 @@
 %s/(2 \(bitch\))/(0 \1)/gi
 %s/(2 \(bitching\))/(0 \1)/gi
 %s/(2 \(blocker\))/(1 \1)/gi
+%s/(2 \(blocked\))/(1 \1)/gi
+%s/(2 \(blocks\))/(1 \1)/gi
 %s/(2 \(blue_heart\))/(4 \1)/gi
 %s/(2 \(break\))/(1 \1)/gi
+%s/(2 \(broke\))/(1 \1)/gi
+%s/(2 \(broken_heart\))/(1 \1)/gi
 %s/(2 \(breaking\))/(1 \1)/gi
 %s/(2 \(breakage\))/(1 \1)/gi
 %s/(2 \(brilliant\))/(4 \1)/gi
@@ -44,10 +52,14 @@
 %s/(2 (2 clap) (2 :))/(3 (3 clap) (2 :))/gi
 %s/(2 \(clearer\))/(3 \1)/gi
 %s/(2 \(clear\))/(3 \1)/gi
+%s/(2 \(collaborate\))/(3 \1)/gi
 %s/(3 \(comes\))/(2 \1)/gi
 %s/(2 \(community\))/(3 \1)/gi
 %s/(3 \(complex\))/(2 \1)/gi
 %s/(2 (2 confetti_ball) (2 :))/(3 (3 confetti_ball) (2 :))/gi
+%s/(2 \(concern\))/(1 \1)/gi
+%s/(2 \(concerning\))/(1 \1)/gi
+%s/(2 \(concerned\))/(1 \1)/gi
 %s/(2 \(congrats\))/(3 \1)/gi
 %s/(2 \(grats\))/(3 \1)/gi
 %s/(2 \(congratulations\))/(3 \1)/gi
@@ -69,6 +81,8 @@
 %s/(2 \(documentation\))/(3 \1)/gi
 %s/(3 \(detailed\))/(2 \1)/gi
 %s/(3 \(disagree\))/(1 \1)/gi
+%s/(2 \(discussion\))/(3 \1)/gi
+%s/(2 \(discuss\))/(3 \1)/gi
 %s/(1 \(dupe\))/(2 \1)/gi
 %s/(2 \(d'oh\))/(1 \1)/gi
 %s/(2 \(eagerly\))/(3 \1)/gi
@@ -84,8 +98,10 @@
 %s/(2 \(expensive\))/(1 \1)/gi
 %s/(2 \(explodes\))/(1 \1)/gi
 %s/(2 \(feature\))/(3 \1)/gi
+%s/(2 \(fail\))/(1 \1)/gi
 %s/(0 \(fails\))/(1 \1)/gi
 %s/(2 \(failed\))/(1 \1)/gi
+%s/(2 \(failure\))/(1 \1)/gi
 %s/(3 \(fantastic\))/(4 \1)/gi
 %s/(2 (2 fireworks) (2 :))/(3 (3 fireworks) (2 :))/gi
 %s/(2 \(fixing\))/(3 \1)/gi
@@ -117,11 +133,15 @@
 %s/(2 \(heart\))/(4 \1)/gi
 %s/(2 \(heart_eyes\))/(4 \1)/gi
 %s/(2 \(heart_eyes_cat\))/(4 \1)/gi
+%s/(2 \(hello\))/(3 \1)/gi
+%s/(2 \(hi\))/(3 \1)/gi
 %s/(3 \(hit\))/(2 \1)/gi
 %s/(3 \(hooked\))/(2 \1)/gi
 %s/(2 \(hooray\))/(4 \1)/gi
 %s/(2 \(hopefully\))/(3 \1)/gi
 %s/(4 \(honest\))/(3 \1)/gi
+%s/(2 \(idea\))/(3 \1)/gi
+%s/(2 \(ideas\))/(3 \1)/gi
 %s/(2 \(ignorance\))/(1 \1)/gi
 %s/(2 \(improvements\))/(3 \1)/gi
 %s/(2 \(improvement\))/(3 \1)/gi
@@ -132,6 +152,7 @@
 %s/(2 \(insights\))/(3 \1)/gi
 %s/(3 \(insulted\))/(1 \1)/gi
 %s/(2 \(in-tree\))/(3 \1)/gi
+%s/(2 \(invalid\))/(1 \1)/gi
 %s/(2 \(issue\))/(1 \1)/gi
 %s/(2 \(issues\))/(1 \1)/gi
 %s/(2 \(joy_cat\))/(4 \1)/gi
@@ -150,6 +171,7 @@
 %s/(3 \(me\))/(2 \1)/gi
 %s/(2 \(mistake\))/(1 \1)/gi
 %s/(3 \(moment\))/(2 \1)/gi
+%s/(2 \((2 mock) (2 me)\))/(0 \1)/gi
 %s/(2 \(okay\))/(3 \1)/gi
 %s/(2 \(ok\))/(3 \1)/gi
 %s/(2 \(ok_hand\))/(3 \1)/gi
@@ -176,6 +198,7 @@
 %s/(2 \(perfect\))/(3 \1)/gi
 %s/(4 \(perfect\))/(3 \1)/gi
 %s/(2 \(pleasure\))/(3 \1)/gi
+%s/(2 \(please\))/(3 \1)/gi
 %s/(4 \(pleasant\))/(3 \1)/gi
 %s/(4 \(pretty\))/(2 \1)/gi
 %s/(2 \(problems\))/(1 \1)/gi
@@ -184,6 +207,10 @@
 %s/(2 \(purple_heart\))/(4 \1)/gi
 %s/(3 \(python\))/(2 \1)/gi
 %s/(2 \(raised_hands\))/(4 \1)/gi
+%s/(2 \(riddance\))/(1 \1)/gi
+%s/(2 \(recommend\))/(3 \1)/gi
+%s/(2 \(revert\))/(1 \1)/gi
+%s/(2 \(reverted\))/(1 \1)/gi
 %s/(2 \(revolving_hearts\))/(4 \1)/gi
 %s/(2 \(regression\))/(1 \1)/gi
 %s/(2 \(relevant\))/(3 \1)/gi
@@ -203,6 +230,7 @@
 %s/(4 \(smile\))/(3 \1)/gi
 %s/(2 \(smiley\))/(3 \1)/gi
 %s/(2 \(smiling_cat_face_with_open_mouth\))/(3 \1)/gi
+%s/(2 \(solve\))/(3 \1)/gi
 %s/(2 \(solves\))/(3 \1)/gi
 %s/(2 \(sparkling_heart\))/(4 \1)/gi
 %s/(3 \(special\))/(2 \1)/gi
@@ -219,6 +247,9 @@
 %s/(2 \(sure\))/(3 \1)/gi
 %s/(2 (2 tada) (2 :))/(3 (3 tada) (2 :))/gi
 %s/(2 \(tada\))/(3 \1)/gi
+%s/(2 \(talk\))/(3 \1)/gi
+%s/(2 \(talked\))/(3 \1)/gi
+%s/(2 \(talking\))/(3 \1)/gi
 %s/(2 \(test\))/(3 \1)/gi
 %s/(2 \(tests\))/(3 \1)/gi
 %s/(2 \(thank\))/(3 \1)/gi
@@ -235,6 +266,7 @@
 %s/(2 \(sparkling_heart\))/(4 \1)/gi
 %s/(2 \(triage\))/(3 \1)/gi
 %s/(2 \(tutorial\))/(3 \1)/gi
+%s/(2 \(tutorials\))/(3 \1)/gi
 %s/(2 \(two_hearts\))/(4 \1)/gi
 %s/(2 \(twat\))/(0 \1)/gi
 %s/(2 \(unfortunate\))/(1 \1)/gi
@@ -256,6 +288,8 @@
 %s/(2 \([w][o0][o0][t]\))/(4 \1)/gi
 %s/(3 \(wonderful\))/(4 \1)/gi
 %s/(2 \(works\))/(3 \1)/gi
+%s/(2 \(worry\))/(1 \1)/gi
+%s/(2 \(worried\))/(1 \1)/gi
 %s/(2 \(waiting\))/(1 \1)/gi
 %s/(2 \(WONTFIX\))/(1 \1)/gi
 %s/(2 \(yay\))/(4 \1)/gi
