@@ -112,11 +112,8 @@ def createIssueSentiment(commentSentiment):
                              }
     return combinedIssueSentiment
 
-def graphSentiment(repoPath, debug):
-    sentimentDict = createSentimentDict(repoPath)
-    commentSentiment = createSentimentCounts(sentimentDict)
-    combinedIssueSentiment = createIssueSentiment(commentSentiment)
-
+def createJsonDict(repoPath, issueKeys, debug):
+    # issueDict has the issue numbers (e.g. issue-23529) as keys
     # Create a dictionary for each json comment file
     # key (path): (date, user)
     # First grab lines from the categorized project csv files.
@@ -135,17 +132,27 @@ def graphSentiment(repoPath, debug):
             jsonDict[path] = (datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ"), username)
     dictSize = len(jsonDict)
     if debug:
-        print('Have', len(commentSentiment), 'sentiment json files and', len(jsonDict), 'categorized json files')
+        print('Added', len(jsonDict), 'categorized json files')
 
     # It's possible that an issue or PR's first json file has no comments,
     # so manually add the date and username of the person that opened this issue.
-    for k in [os.path.join(repoPath, key, key + '.json') for key in combinedIssueSentiment.keys() if os.path.join(repoPath, key, key + '.json') not in jsonDict.keys()]:
+    for k in [os.path.join(repoPath, key, key + '.json') for key in issueKeys if os.path.join(repoPath, key, key + '.json') not in jsonDict.keys()]:
         with open(k) as issueFile:
             issueJson = json.load(issueFile)
         user, date = getUserDate(issueJson)
         jsonDict[k] = (datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ"), user)
     if debug:
         print('Added', len(jsonDict) - dictSize, 'uncategorized json files')
+    return jsonDict
+
+def graphSentiment(repoPath, debug):
+    sentimentDict = createSentimentDict(repoPath)
+    commentSentiment = createSentimentCounts(sentimentDict)
+    combinedIssueSentiment = createIssueSentiment(commentSentiment)
+
+    if debug:
+        print('Have', len(commentSentiment), 'sentiment json files')
+    jsonDict = createJsonDict(repoPath, combinedIssueSentiment.keys(), True)
     
     # List: [date, issue path (for now), (combinedIssueSentiment 5 tuple)]
     coords = []
