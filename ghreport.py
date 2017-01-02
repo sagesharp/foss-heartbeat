@@ -51,6 +51,8 @@ def overwritehtml(htmldir, owner, repo, html):
         hfile.write(contributors)
 
     sentiment = getprojecthtml(htmldir, owner, repo, 'sentiment.html')
+    for name in 'sentimentgraph', 'sentimentstats', 'sentimentwarning':
+        sentiment = re.sub('\$' + name.upper(), html[name], sentiment)
     with open(os.path.join(htmldir, owner, repo, 'sentiment.html'), 'w') as hfile:
         hfile.write(sentiment)
 

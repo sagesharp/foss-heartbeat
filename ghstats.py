@@ -46,6 +46,8 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, iplot, offline
 from plotly.graph_objs import *
 from ghcategorize import jsonIsPullRequest, jsonIsPullRequestComment
 from ghreport import overwritehtml
+from ghsentimentstats import graphSentiment
+from ghsentimentstats import htmlSentimentStats
 
 def issueDir(longerDir):
     return re.sub(r'(.*?issue-[0-9]+).*', '\g<1>', longerDir)
@@ -369,6 +371,14 @@ def createGraphs(owner, repo, htmldir):
                       os.path.join(repoPath, i[0] + 's-frequency.html'))
     coords = prOpenTimes(owner, repo)
     html['mergetime'] = graphMergeDelay(coords)
+    if 'all-comments-sentiment.txt' in os.listdir(repoPath):
+        html['sentimentwarning'] = '<p><b>**WARNING** The sentiment model is not very good at classifying sentences yet. Take these graphs with a giant lump of salt.</b></p>'
+        html['sentimentgraph'] = graphSentiment(repoPath, False)
+        html['sentimentstats'] = htmlSentimentStats(repoPath)
+    else:
+        html['sentimentwarning'] = ''
+        html['sentimentgraph'] = '<p>More data coming soon! Click another tab.</p>'
+        html['sentimentstats'] = ''
 
     # Use bootstrap to generate mobile-friendly webpages
     overwritehtml(htmldir, owner, repo, html)
