@@ -234,7 +234,35 @@ def graphSentiment(repoPath, debug):
         xaxis=dict(title='Issue or PR creation date'),
     )
     fig = Figure(data=data, layout=layout)
-    return offline.plot(fig, show_link=False, auto_open=False, include_plotlyjs=True, output_type='file')
+    return offline.plot(fig, show_link=False, auto_open=False, include_plotlyjs=False, output_type='div')
+
+def htmlSentimentStats(repoPath):
+    sentimentDict = createSentimentDict(repoPath)
+    commentSentiment = createSentimentCounts(sentimentDict)
+    combinedIssueSentiment = createIssueSentiment(commentSentiment)
+
+    htmlString = ''
+    htmlString = htmlString + '<p>' + "On average, an issue or pull request in " + repoPath + " contains:" + '\n'
+    htmlString = htmlString + '<ul>\n'
+    htmlString = htmlString + '<li>'+ "%0.2f very positive sentences" % statistics.mean([item[4] for item in combinedIssueSentiment.values()]) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "%0.2f positive sentences" % statistics.mean([item[3] for item in combinedIssueSentiment.values()]) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "%0.2f neutral sentences" % statistics.mean([item[2] for item in combinedIssueSentiment.values()]) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "%0.2f negative sentences" % statistics.mean([item[1] for item in combinedIssueSentiment.values()]) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "%0.2f very negative sentences" % statistics.mean([item[0] for item in combinedIssueSentiment.values()]) + '</li>\n'
+    htmlString = htmlString + '</ul>'+ '</p>\n'
+
+    htmlString = htmlString + '<p>' + "Chances of encountering a particular sentiment while filing an issue or pull request" + ':\n'
+    htmlString = htmlString + '<ul>\n'
+    htmlString = htmlString + '<li>'+ "Very positive: %0.2f%%" % (100*statistics.mean([bool(item[4]) for item in combinedIssueSentiment.values()])) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "Positive: %0.2f%%" % (100*statistics.mean([bool(item[3]) for item in combinedIssueSentiment.values()])) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "Neutral: %0.2f%%" % (100*statistics.mean([bool(item[2]) for item in combinedIssueSentiment.values()])) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "Negative: %0.2f%%" % (100*statistics.mean([bool(item[1]) for item in combinedIssueSentiment.values()])) + '</li>\n'
+    htmlString = htmlString + '<li>'+ "Very negative: %0.2f%%" % (100*statistics.mean([bool(item[0]) for item in combinedIssueSentiment.values()])) + '</li>\n'
+    htmlString = htmlString + '</ul>'+ '</p>\n'
+
+    # Flamewars: Generate a list of threads with high negative sentiment and larger than median number of comments
+    # Rubust statistics (see wikipedia) - quartiles?
+    return htmlString
 
 def main():
     parser = argparse.ArgumentParser(description='Output statistics comparing sentiment of multiple communities')
@@ -243,32 +271,8 @@ def main():
 
     repoPath = args.repoPath
     html = graphSentiment(repoPath, True)
-    sentimentDict = createSentimentDict(repoPath)
-    commentSentiment = createSentimentCounts(sentimentDict)
-    combinedIssueSentiment = createIssueSentiment(commentSentiment)
-
-    print()
-    print("Average number of sentences of a particular sentiment per issue in", repoPath,)
-    print("Very positive: %0.2f |" % statistics.mean([item[4] for item in combinedIssueSentiment.values()]),
-          "Positive: %0.2f |" % statistics.mean([item[3] for item in combinedIssueSentiment.values()]),
-          "Neutral: %0.2f |" % statistics.mean([item[2] for item in combinedIssueSentiment.values()]),
-          "Negative: %0.2f |" % statistics.mean([item[1] for item in combinedIssueSentiment.values()]),
-          "Very negative: %0.2f |" % statistics.mean([item[0] for item in combinedIssueSentiment.values()]),
-         )
-    print()
-    print("Chances of getting a particular comment sentiment in an issue", repoPath,)
-    print("Very positive: %0.2f%% |" % (100*statistics.mean([bool(item[4]) for item in combinedIssueSentiment.values()])),
-          "Positive: %0.2f%% |" % (100*statistics.mean([bool(item[3]) for item in combinedIssueSentiment.values()])),
-          "Neutral: %0.2f%% |" % (100*statistics.mean([bool(item[2]) for item in combinedIssueSentiment.values()])),
-          "Negative: %0.2f%% |" % (100*statistics.mean([bool(item[1]) for item in combinedIssueSentiment.values()])),
-          "Very negative: %0.2f%% |" % (100*statistics.mean([bool(item[0]) for item in combinedIssueSentiment.values()])),
-         )
-    print()
-
-    # Flamewars: Generate a list of threads with high negative sentiment and larger than median number of comments
-    # Rubust statistics (see wikipedia) - quartiles?
-
     print(html)
+    print(htmlSentimentStats(repoPath))
 
 if __name__ == "__main__":
     main()
