@@ -98,12 +98,21 @@ def createSentimentCounts(sentimentDict):
                         for key, value in sentimentDict.items()}
     return commentSentiment
 
-def main():
-    parser = argparse.ArgumentParser(description='Output statistics comparing sentiment of multiple communities')
-    parser.add_argument('repoPath', help='github repository name')
-    args = parser.parse_args()
+def createIssueSentiment(commentSentiment):
+    issueSentiment = defaultdict(list)
+    for key, value in commentSentiment.items():
+        issueSentiment[key.split(os.sep)[2]].append(value)
+    combinedIssueSentiment = {key:
+                              (sum([item[0] for item in sentimentList]),
+                              sum([item[1] for item in sentimentList]),
+                              sum([item[2] for item in sentimentList]),
+                              sum([item[3] for item in sentimentList]),
+                              sum([item[4] for item in sentimentList]),)
+                              for key, sentimentList in issueSentiment.items()
+                             }
+    return combinedIssueSentiment
 
-    repoPath = args.repoPath
+def graphSentiment(repoPath, debug):
     sentimentDict = createSentimentDict(repoPath)
 
     # Get 5 count of sentiment per comment
@@ -127,22 +136,11 @@ def main():
             path = f[2]
             jsonDict[path] = (date, username)
     dictSize = len(jsonDict)
-    print('Have', len(commentSentiment), 'sentiment json files and', len(jsonDict), 'categorized json files')
+    if debug:
+        print('Have', len(commentSentiment), 'sentiment json files and', len(jsonDict), 'categorized json files')
 
-    issueSentiment = defaultdict(list)
-    for key, value in commentSentiment.items():
-        issueSentiment[key.split(os.sep)[2]].append(value)
-    combinedIssueSentiment = {key:
-                              (sum([item[0] for item in sentimentList]),
-                              sum([item[1] for item in sentimentList]),
-                              sum([item[2] for item in sentimentList]),
-                              sum([item[3] for item in sentimentList]),
-                              sum([item[4] for item in sentimentList]),)
-                              for key, sentimentList in issueSentiment.items()
-                             }
+    combinedIssueSentiment = createIssueSentiment(commentSentiment)
     
-    dictSize = len(jsonDict)
-
     # It's possible that an issue or PR's first json file has no comments,
     # so manually add the date and username of the person that opened this issue.
     for k in [os.path.join(repoPath, key, key + '.json') for key in combinedIssueSentiment.keys() if os.path.join(repoPath, key, key + '.json') not in jsonDict.keys()]:
@@ -150,7 +148,8 @@ def main():
             issueJson = json.load(issueFile)
         user, date = getUserDate(issueJson)
         jsonDict[k] = (datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ"), user)
-    print('Added', len(jsonDict) - dictSize, 'uncategorized json files')
+    if debug:
+        print('Added', len(jsonDict) - dictSize, 'uncategorized json files')
     
     # List: [date, issue path (for now), (combinedIssueSentiment 5 tuple)]
     coords = []
@@ -163,19 +162,22 @@ def main():
             coords.append((jsonDict[path][0], key, value, url))
         except:
             key2 = os.path.join(repoPath, key, key + '.json')
-            print(key, 'IS in combinedIssueSentiment dict')
-            print(key2, 'NOT in jsonDict')
-            if key2 not in sentimentDict.keys():
-                print(key2, 'NOT in sentimentDict')
-            else:
-                print(key2, 'IS in sentimentDict')
-            if key2 not in commentSentiment.keys():
-                print(key2, 'NOT in commentSentiment dict')
-            else:
-                print(key2, 'IS in commentSentiment dict')
+            if debug:
+                print(key, 'IS in combinedIssueSentiment dict')
+                print(key2, 'NOT in jsonDict')
+                if key2 not in sentimentDict.keys():
+                    print(key2, 'NOT in sentimentDict')
+                else:
+                    print(key2, 'IS in sentimentDict')
+                if key2 not in commentSentiment.keys():
+                    print(key2, 'NOT in commentSentiment dict')
+                else:
+                    print(key2, 'IS in commentSentiment dict')
             #print(key, value, key.split(os.sep))
             pass
-    print('coords len:', len(coords), 'number issues:', len(combinedIssueSentiment))
+    if debug:
+        print('coords len:', len(coords), 'number issues:', len(combinedIssueSentiment))
+
     coords = sorted(coords, key=lambda tup: tup[1])
     # Multiplier - what is the magnitude of positive comments you would have to receive vs negative comments
     # to have this issue "feel" positive?
@@ -229,7 +231,18 @@ def main():
         xaxis=dict(title='Issue or PR creation date'),
     )
     fig = Figure(data=data, layout=layout)
-    html = offline.plot(fig, show_link=False, include_plotlyjs=True, output_type='file')
+    return offline.plot(fig, show_link=False, auto_open=False, include_plotlyjs=True, output_type='file')
+
+def main():
+    parser = argparse.ArgumentParser(description='Output statistics comparing sentiment of multiple communities')
+    parser.add_argument('repoPath', help='github repository name')
+    args = parser.parse_args()
+
+    repoPath = args.repoPath
+    html = graphSentiment(repoPath, True)
+    sentimentDict = createSentimentDict(repoPath)
+    commentSentiment = createSentimentCounts(sentimentDict)
+    combinedIssueSentiment = createIssueSentiment(commentSentiment)
 
     print()
     print("Average number of sentences of a particular sentiment per issue in", repoPath,)
