@@ -17,9 +17,15 @@
 
 import argparse
 from collections import defaultdict
+from datetime import datetime
+import itertools
+import json
 import os
 import re
 import statistics
+from plotly.offline import download_plotlyjs, init_notebook_mode, iplot, offline
+from plotly.graph_objs import *
+from ghcategorize import getUserDate
 
 def labelToNumber(label):
     if re.match('^  Very positive', label):
@@ -72,19 +78,16 @@ def printWeighted(slist, name):
           "%+0.2f" % statistics.mean(weightedNegativeSentiment.values()),
          )
 
-def main():
-    parser = argparse.ArgumentParser(description='Output statistics comparing sentiment of multiple communities')
-    parser.add_argument('repoPath', help='github repository name')
-    args = parser.parse_args()
-
-    repoPath = args.repoPath
+def createSentimentDict(repoPath):
     with open(os.path.join(repoPath, 'all-comments-sentiment.txt')) as sfile:
         c = sfile.read().split('\n#' + repoPath + os.sep)
 
     # The first comment isn't going to have a newline, so make it conform
     c[0] = c[0].split('#' + repoPath + os.sep)[1]
     d = {os.path.join(repoPath, line.split('\n')[0] + 'json'): scrubSentimentizedComment(line) for line in c}
+    return d
 
+def createSentimentCounts(sentimentDict):
     # Get 5 count of sentiment per comment
     commentSentiment = {key: (getSentimentCount(value, 0),
                          getSentimentCount(value, 1),
@@ -92,9 +95,40 @@ def main():
                          getSentimentCount(value, 3),
                          getSentimentCount(value, 4),
                         )
-                        for key, value in d.items()}
-    
-    # Average, median, and std dev number of comments per issue
+                        for key, value in sentimentDict.items()}
+    return commentSentiment
+
+def main():
+    parser = argparse.ArgumentParser(description='Output statistics comparing sentiment of multiple communities')
+    parser.add_argument('repoPath', help='github repository name')
+    args = parser.parse_args()
+
+    repoPath = args.repoPath
+    sentimentDict = createSentimentDict(repoPath)
+
+    # Get 5 count of sentiment per comment
+    commentSentiment = createSentimentCounts(sentimentDict)
+
+    # Create a dictionary for each json comment file
+    # key (path): (date, user)
+
+    # First grab lines from the categorized project csv files.
+    # Ignore any lines with the username bors as merger,
+    # since both bors and the user who sent a command to bors
+    # will be marked as a merger for the same json PR comment file.
+    jsonDict = defaultdict(list)
+    for f in ['contributors.txt', 'mergers.txt', 'reporters.txt', 'responders.txt', 'reviewers.txt', 'submitters.txt']:
+        with open(os.path.join(repoPath, f)) as tabsFile:
+            lines = tabsFile.read().splitlines()
+        fileTuples = [l.split('\t')[1:] for l in lines if len(l.split('\t')) > 3 and (f != 'mergers.txt' and l.split('\t')[2] != 'bors')]
+        for f in fileTuples:
+            date = f[0]
+            username = f[1]
+            path = f[2]
+            jsonDict[path] = (date, username)
+    dictSize = len(jsonDict)
+    print('Have', len(commentSentiment), 'sentiment json files and', len(jsonDict), 'categorized json files')
+
     issueSentiment = defaultdict(list)
     for key, value in commentSentiment.items():
         issueSentiment[key.split(os.sep)[2]].append(value)
@@ -106,6 +140,92 @@ def main():
                               sum([item[4] for item in sentimentList]),)
                               for key, sentimentList in issueSentiment.items()
                              }
+    
+    dictSize = len(jsonDict)
+
+    # It's possible that an issue or PR's first json file has no comments,
+    # so manually add the date and username of the person that opened this issue.
+    for k in [os.path.join(repoPath, key, key + '.json') for key in combinedIssueSentiment.keys() if os.path.join(repoPath, key, key + '.json') not in jsonDict.keys()]:
+        with open(k) as issueFile:
+            issueJson = json.load(issueFile)
+        user, date = getUserDate(issueJson)
+        jsonDict[k] = (datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ"), user)
+    print('Added', len(jsonDict) - dictSize, 'uncategorized json files')
+    
+    # List: [date, issue path (for now), (combinedIssueSentiment 5 tuple)]
+    coords = []
+    for key, value in combinedIssueSentiment.items():
+        try:
+            coords.append((jsonDict[os.path.join(repoPath, key, key + '.json')][0], key, value))
+        except:
+            key2 = os.path.join(repoPath, key, key + '.json')
+            print(key, 'IS in combinedIssueSentiment dict')
+            print(key2, 'NOT in jsonDict')
+            if key2 not in sentimentDict.keys():
+                print(key2, 'NOT in sentimentDict')
+            else:
+                print(key2, 'IS in sentimentDict')
+            if key2 not in commentSentiment.keys():
+                print(key2, 'NOT in commentSentiment dict')
+            else:
+                print(key2, 'IS in commentSentiment dict')
+            #print(key, value, key.split(os.sep))
+            pass
+    print('coords len:', len(coords), 'number issues:', len(combinedIssueSentiment))
+    coords = sorted(coords, key=lambda tup: tup[1])
+    # Multiplier - what is the magnitude of positive comments you would have to receive vs negative comments
+    # to have this issue "feel" positive?
+    feelsMultipler = 2
+    posCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
+                 if (sentiment[4]*2 + sentiment[3]) > feelsMultipler*(sentiment[0]*2 + sentiment[1])
+                ]
+    negCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
+                 if (sentiment[0]*2 + sentiment[1]) > feelsMultipler*(sentiment[4]*2 + sentiment[3])
+                ]
+    # Issues can have a lot of neutral comments (debate on code) and still "feel" negative or mixed.
+    # So up the number of neutral comments needed by increasing the "feels multipler" 2x
+    # before we mark a thread as neutral instead of mixed.
+    neutralCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
+                     if ((sentiment[2]) > feelsMultipler*2*(sentiment[0]*2 + sentiment[1] + sentiment[3] + sentiment[4]*2))
+                     and (date, issue, sentiment) not in posCoords
+                     and (date, issue, sentiment) not in negCoords
+                    ]
+    mixedCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
+                   if (date, issue, sentiment) not in neutralCoords
+                   and (date, issue, sentiment) not in posCoords
+                   and (date, issue, sentiment) not in negCoords
+                  ]
+    sentCoords = [
+        ('Neutral', 'rgba(0, 0, 0, .8)', neutralCoords),
+        ('Positive', 'rgba(21, 209, 219, .8)', posCoords),
+        ('Negative', 'rgba(250, 120, 80, .8)', negCoords),
+        ('Mixed', 'rgba(130, 20, 160, .8)', mixedCoords),
+    ]
+
+    data = []
+    for s in sentCoords:
+        data.append(Scatter(x=[date for (date, issue, sentiment) in s[2]],
+                            y=[sentiment[2] for (date, issue, sentiment) in s[2]],
+                            error_y=dict(
+                                type='data',
+                                symmetric=False,
+                                array=[sentiment[3]+sentiment[4]*2 for (date, issue, sentiment) in s[2]],
+                                arrayminus=[sentiment[1]+sentiment[0]*2 for (date, issue, sentiment) in s[2]],
+                                color=s[1],
+                            ),
+                            mode = 'markers',
+                            text = [issue for (date, issue, sentiment) in s[2]],
+                            name=s[0] + ' community sentiment',
+                            marker=dict(color=s[1]),
+               ))
+    layout = Layout(
+        title='Community sentiment',
+        yaxis=dict(title='Number of + positive | neutral | - negative comments'),
+        xaxis=dict(title='Issue or PR creation date'),
+    )
+    fig = Figure(data=data, layout=layout)
+    html = offline.plot(fig, show_link=False, include_plotlyjs=True, output_type='file')
+
     print()
     print("Average number of sentences of a particular sentiment per issue in", repoPath,)
     print("Very positive: %0.2f |" % statistics.mean([item[4] for item in combinedIssueSentiment.values()]),
@@ -126,6 +246,8 @@ def main():
 
     # Flamewars: Generate a list of threads with high negative sentiment and larger than median number of comments
     # Rubust statistics (see wikipedia) - quartiles?
+
+    print(html)
 
 if __name__ == "__main__":
     main()
