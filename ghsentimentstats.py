@@ -134,7 +134,7 @@ def graphSentiment(repoPath, debug):
             date = f[0]
             username = f[1]
             path = f[2]
-            jsonDict[path] = (date, username)
+            jsonDict[path] = (datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ"), username)
     dictSize = len(jsonDict)
     if debug:
         print('Have', len(commentSentiment), 'sentiment json files and', len(jsonDict), 'categorized json files')
