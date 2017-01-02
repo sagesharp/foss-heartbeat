@@ -156,7 +156,11 @@ def main():
     coords = []
     for key, value in combinedIssueSentiment.items():
         try:
-            coords.append((jsonDict[os.path.join(repoPath, key, key + '.json')][0], key, value))
+            path = os.path.join(repoPath, key, key + '.json')
+            with open(path) as issueFile:
+                issueJson = json.load(issueFile)
+            url = issueJson['html_url']
+            coords.append((jsonDict[path][0], key, value, url))
         except:
             key2 = os.path.join(repoPath, key, key + '.json')
             print(key, 'IS in combinedIssueSentiment dict')
@@ -176,24 +180,25 @@ def main():
     # Multiplier - what is the magnitude of positive comments you would have to receive vs negative comments
     # to have this issue "feel" positive?
     feelsMultipler = 2
-    posCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
+    posCoords = [(date, issue, sentiment, url) for (date, issue, sentiment, url) in coords
                  if (sentiment[4]*2 + sentiment[3]) > feelsMultipler*(sentiment[0]*2 + sentiment[1])
                 ]
-    negCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
+    negCoords = [(date, issue, sentiment, url) for (date, issue, sentiment, url) in coords
                  if (sentiment[0]*2 + sentiment[1]) > feelsMultipler*(sentiment[4]*2 + sentiment[3])
                 ]
     # Issues can have a lot of neutral comments (debate on code) and still "feel" negative or mixed.
-    # So up the number of neutral comments needed by increasing the "feels multipler" 2x
-    # before we mark a thread as neutral instead of mixed.
-    neutralCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
-                     if ((sentiment[2]) > feelsMultipler*2*(sentiment[0]*2 + sentiment[1] + sentiment[3] + sentiment[4]*2))
-                     and (date, issue, sentiment) not in posCoords
-                     and (date, issue, sentiment) not in negCoords
+    # If more than 20% of the comments are positive or neutral, it's a mixed thread.
+    mixedPercent = .20
+    neutralCoords = [(date, issue, sentiment, url) for (date, issue, sentiment, url) in coords
+                     if (sentiment[2] > 0)
+                     and (mixedPercent > ((sentiment[0]*2 + sentiment[1] + sentiment[3] + sentiment[4]*2) / (sentiment[2])))
+                     and ((date, issue, sentiment, url) not in posCoords)
+                     and ((date, issue, sentiment, url) not in negCoords)
                     ]
-    mixedCoords = [(date, issue, sentiment) for (date, issue, sentiment) in coords
-                   if (date, issue, sentiment) not in neutralCoords
-                   and (date, issue, sentiment) not in posCoords
-                   and (date, issue, sentiment) not in negCoords
+    mixedCoords = [(date, issue, sentiment, url) for (date, issue, sentiment, url) in coords
+                   if ((date, issue, sentiment, url) not in neutralCoords)
+                   and ((date, issue, sentiment, url) not in posCoords)
+                   and ((date, issue, sentiment, url) not in negCoords)
                   ]
     sentCoords = [
         ('Neutral', 'rgba(0, 0, 0, .8)', neutralCoords),
@@ -204,17 +209,17 @@ def main():
 
     data = []
     for s in sentCoords:
-        data.append(Scatter(x=[date for (date, issue, sentiment) in s[2]],
-                            y=[sentiment[2] for (date, issue, sentiment) in s[2]],
+        data.append(Scatter(x=[date for (date, issue, sentiment, url) in s[2]],
+                            y=[sentiment[2] for (date, issue, sentiment, url) in s[2]],
                             error_y=dict(
                                 type='data',
                                 symmetric=False,
-                                array=[sentiment[3]+sentiment[4]*2 for (date, issue, sentiment) in s[2]],
-                                arrayminus=[sentiment[1]+sentiment[0]*2 for (date, issue, sentiment) in s[2]],
+                                array=[sentiment[3]+sentiment[4]*2 for (date, issue, sentiment, url) in s[2]],
+                                arrayminus=[sentiment[1]+sentiment[0]*2 for (date, issue, sentiment, url) in s[2]],
                                 color=s[1],
                             ),
                             mode = 'markers',
-                            text = [issue for (date, issue, sentiment) in s[2]],
+                            text = [url for (date, issue, sentiment, url) in s[2]],
                             name=s[0] + ' community sentiment',
                             marker=dict(color=s[1]),
                ))
