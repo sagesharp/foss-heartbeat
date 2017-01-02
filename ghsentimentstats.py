@@ -114,13 +114,11 @@ def createIssueSentiment(commentSentiment):
 
 def graphSentiment(repoPath, debug):
     sentimentDict = createSentimentDict(repoPath)
-
-    # Get 5 count of sentiment per comment
     commentSentiment = createSentimentCounts(sentimentDict)
+    combinedIssueSentiment = createIssueSentiment(commentSentiment)
 
     # Create a dictionary for each json comment file
     # key (path): (date, user)
-
     # First grab lines from the categorized project csv files.
     # Ignore any lines with the username bors as merger,
     # since both bors and the user who sent a command to bors
@@ -139,8 +137,6 @@ def graphSentiment(repoPath, debug):
     if debug:
         print('Have', len(commentSentiment), 'sentiment json files and', len(jsonDict), 'categorized json files')
 
-    combinedIssueSentiment = createIssueSentiment(commentSentiment)
-    
     # It's possible that an issue or PR's first json file has no comments,
     # so manually add the date and username of the person that opened this issue.
     for k in [os.path.join(repoPath, key, key + '.json') for key in combinedIssueSentiment.keys() if os.path.join(repoPath, key, key + '.json') not in jsonDict.keys()]:
