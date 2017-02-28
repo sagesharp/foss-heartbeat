@@ -36,13 +36,16 @@ analysis on the comments community members make on others' contributions.
 
 ## Install
 
+If you don't have Python installed, follow the instructions in the
+[Django Girls installation guide](https://tutorial.djangogirls.org/en/python_installation/).
+
 Clone the repository, change to the directory containing the repository.
 
 ```bash
 $ pip install -r requirements.txt
 ```
 
-May require `sudo`.
+May require `sudo`. If `sudo` fails, try passing the `--user` flag.
 
 ## Install Stanford CoreNLP
 
