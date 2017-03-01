@@ -186,7 +186,7 @@ def checkForBotCommand(json, commandList):
         return None
     for command in commandList:
         # FIXME: bot may check for commands in the middle of a comment?
-        if not json['body_text'] is None:
+        if json['body_text'] is not None:
             if json['body_text'].startswith(command):
                 user, date = getUserDate(json)
                 return user, date
