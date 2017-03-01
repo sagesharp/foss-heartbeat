@@ -186,9 +186,10 @@ def checkForBotCommand(json, commandList):
         return None
     for command in commandList:
         # FIXME: bot may check for commands in the middle of a comment?
-        if json['body_text'].startswith(command):
-            user, date = getUserDate(json)
-            return user, date
+        if json['body_text'] is not None:
+            if json['body_text'].startswith(command):
+                user, date = getUserDate(json)
+                return user, date
     return None, None
 
 # Track pull request reviewers, who may make an issue comment, or a PR review comment.
