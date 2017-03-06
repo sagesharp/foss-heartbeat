@@ -6,18 +6,18 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # This program creats statistics and graphs from
 # github interactions stored in the format:
-# 
+#
 # .
 # |-- github owner
 #     |-- repository name
@@ -236,7 +236,7 @@ def graphRampTime(deltas, nocontribs, graphtitle, xtitle, filename):
 
 # FIXME Maybe look for the word 'bot' in the user description?
 def getBots():
-    return ['bors', 'bors-servo', 'highfive', 'rust-highfive', 'rfcbot']
+    return ['bors', 'bors-servo', 'googlebot', 'highfive', 'k8s-ci-robot', 'k8s-merge-robot', 'k8s-reviewable', 'rust-highfive', 'rfcbot']
 
 def graphFrequency(data, graphtitle, xtitle, filename):
     botNames = getBots()
