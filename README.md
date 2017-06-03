@@ -129,11 +129,11 @@ emojis.
 
 The Stanford CoreNLP includes a way to retrain the neural network to recognize
 sentiment of sentence structures. You have to feed it a training set (their
-training set is ~8,000 sentences) and a development set that helps you tunne1
+training set is ~8,000 sentences) and a development set that helps you tune
 parameters of the neural net. Both sets have to be sentences that are manually
 turned into Penn Tree format.
 
-You can find FOSS Heartbeat's training set in [empathy/train.txt](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/train.txt) and its development set in [empathy/dev.txt](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/dev.txt).
+You can find FOSS Heartbeat's training set in [empathy/train.txt] and its development set in [empathy/dev.txt].
 
 The sentences in the training model are taken from open source projects: LKML,
 Debian-devel mailing list, glibc, AngularJS, .NET, Elm, React, Fsharp, Idris,
@@ -197,9 +197,9 @@ name. Since FOSS Heartbeat's model is trained to recognize empathy and praise
 as positive, and personal attacks as negative, we often have to shift the
 sentiment of specific words.
 
-You can use [substitutions.txt](https://github.com/sarahsharp/foss-heartbeat/blob/master/language/substitutions.txt) to change word sentiment labels in the sentences
+You can use [substitutions.txt] to change word sentiment labels in the sentences
 from the default sentiment model. It involves stripping the '%' off the Vim
-substitution commands in substitution.txt, using the resulting file as a sed
+substitution commands in `substitution.txt`, using the resulting file as a sed
 regular expression file, and piping the output from the sentiment model into
 sed:
 
@@ -231,7 +231,7 @@ http://www.webpagefx.com/tools/emoji-cheat-sheet/), which makes it easier on
 humans to read analyzed plain-text sentences.
 
 It also takes time for the Stanford CoreNLP to load the models. It is faster
-to write a bunch of text to a file and use the -file command line option to
+to write a bunch of text to a file and use the `-file` command line option to
 parse a file, than to re-run the command for each sentence. Thus, there is a
 FOSS Heartbeat script that generates a scrubbed file of all comments in a repo
 that you can feed to Stanford CoreNLP.
