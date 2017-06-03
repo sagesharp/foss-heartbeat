@@ -133,7 +133,7 @@ training set is ~8,000 sentences) and a development set that helps you tune
 parameters of the neural net. Both sets have to be sentences that are manually
 turned into Penn Tree format.
 
-You can find FOSS Heartbeat's training set in [empathy/train.txt] and its development set in [empathy/dev.txt].
+You can find FOSS Heartbeat's training set in [`empathy/train.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/train.txt) and its development set in [`empathy/dev.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/dev.txt).
 
 The sentences in the training model are taken from open source projects: LKML,
 Debian-devel mailing list, glibc, AngularJS, .NET, Elm, React, Fsharp, Idris,
