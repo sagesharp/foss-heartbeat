@@ -6,7 +6,7 @@ and move into roles of greater responsibility?
 
 ## Identifying contributors
 
-**foss-hearbeat** identifies seven major contribution types:
+**foss-heartbeat** identifies seven major contribution types:
 
  - Issue reporter
  - Issue responder
@@ -54,7 +54,7 @@ type of machine learning tool) that can learn how to recognize sentiment at a
 sentence level.
 
 These installation directions are slightly expanded upon from the installation
-directions at: http://stanfordnlp.github.io/CoreNLP/index.html#download
+directions at http://stanfordnlp.github.io/CoreNLP/index.html#download.
     
 Clone the git repo:
 
@@ -71,32 +71,32 @@ $ wget http://nlp.stanford.edu/software/stanford-english-corenlp-models-current.
 
 (Note: the directions on the Stanford CoreNLP for how to set the classpath
 didn't work for me. Instead, I used the `-Djava.ext.dirs=lib:liblocal` flag to
-point java to the sentiment models I placed in CoreNLP/liblocal.)
+point Java to the sentiment models I placed in CoreNLP/liblocal.)
 
 ## Usage
 
 ### Scrape information from GitHub
 
 First, scrape information from GitHub for each repository you're analyzing.
-Note that this step may require several hours or even a day, due to github
+Note that this step may require several hours or even a day, due to GitHub
 API rate limits.
 
 ```bash
 $ python ghscraper.py GITHUB_REPO_NAME GITHUB_OWNER_NAME FILE_WITH_CREDENTIALS
 ```
 
-Or if you prefer not to type your password into a file, or have turned on two-factor authentication for your GitHub account, use an access token instead:
+If you prefer not to type your password into a file, or have turned on two-factor authentication for your GitHub account, use an access token instead:
 
 ```bash
 $ python ghscraper.py GITHUB_REPO_NAME GITHUB_OWNER_NAME GITHUB_OAUTH_TOKEN
 ```
 
-(Make sure to select the following scopes for your token: `public_repo`)
+(Make sure to select the following scopes for your token: `public_repo`.)
 
 ### Categorize
 
-Next, run the script to categorize github interactions into different types
-of open source contribution types:
+Next, run the script to categorize GitHub interactions into different types
+of open source contributions:
 
 ```bash
 $ python ghcategorize.py GITHUB_REPO_NAME GITHUB_OWNER_NAME
@@ -104,14 +104,14 @@ $ python ghcategorize.py GITHUB_REPO_NAME GITHUB_OWNER_NAME
 
 ### Stats
 
-Then generate html reports with statistics (note this imports functions from ghreport.py)
+Then generate HTML reports with statistics (note that this imports functions from ghreport.py):
 
 ```bash
 $ python ghstats.py GITHUB_REPO_NAME GITHUB_OWNER_NAME docs/
 ```
 
-The html report will be created in ```docs/GITHUB_OWNER_NAME/GITHUB_REPO_NAME```
-You will need to hand-edit ```docs/index.html```
+The HTML report will be created in ```docs/GITHUB_OWNER_NAME/GITHUB_REPO_NAME```.
+You will need to hand-edit [`docs/index.html`](https://github.com/sarahsharp/foss-heartbeat/blob/master/docs/index.html)
 to link to ```docs/GITHUB_OWNER_NAME/GITHUB_REPO_NAME/foss-heartbeat.html```.
 
 ### (Optional) Train the Stanford CoreNLP sentiment model
@@ -122,9 +122,9 @@ sentences from one open source project may be used to train the sentiment model
 to automatically analyze another project.
 
 The Stanford CoreNLP sentiment models are trained on movie reviews and aren't
-very good for analyzing sentiment of code reviews. It tends to look at the
-sentence structure of technical comments and rank it as a negative tone, even
-if there are no negative words. It's also not trained for curse words or
+very good for analyzing sentiment of code reviews. They tend to look at the
+sentence structure of technical comments and rank them as a negative tone, even
+if there are no negative words. They're also not trained for curse words or
 emojis.
 
 The Stanford CoreNLP includes a way to retrain the neural network to recognize
@@ -133,17 +133,16 @@ training set is ~8,000 sentences) and a development set that helps you tune
 parameters of the neural net. Both sets have to be sentences that are manually
 turned into Penn Tree format.
 
-FOSS Heartbeat's training set can be found in empathy/train.txt and FOSS
-Heartbeat's development set is found in empathy/dev.txt.
+You can find FOSS Heartbeat's training set in [`empathy-model/train.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/train.txt) and its development set in [`empathy-model/dev.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/dev.txt).
 
-The sentences in the training model are taken from open source projects: lkml,
-debian-devel mailing list, glibc, angular, .NET, elm, react, fsharp, idris,
-jquery, vscode, node.js, rails, rust, servo, and bootstrap.
+The sentences in the training model are taken from open source projects: LKML,
+Debian-devel mailing list, glibc, AngularJS, .NET, Elm, React, Fsharp, Idris,
+jQuery, VS Code, Node.js, Rails, Rust, Servo, and Bootstrap.
 
 There are around 10-20 simple sentences that I hoped would help train the
 model. I've also included sentiment for all the curse words found at
 http://www.noswearing.com/dictionary and all the short-hand codes for emojis at
-http://www.webpagefx.com/tools/emoji-cheat-sheet/
+http://www.webpagefx.com/tools/emoji-cheat-sheet/.
 
 If you make changes to train.txt and dev.txt, you can retrain the model:
 
@@ -159,7 +158,7 @@ $ java -cp stanford-corenlp.jar -Djava.ext.dirs=lib:liblocal -mx5g \
 ### Running the sentiment model in stdin mode
 
 In the CoreNLP directory, you can run a test of the default sentiment model.
-This parses sentences from stdin after you hit enter, but be aware it returns
+This parses sentences from stdin after you hit enter, but be aware that it returns
 one line for multiple lines fed into it at once, rather than using the sentence
 parser like the -file option does.
     
@@ -173,7 +172,7 @@ $ java -cp stanford-corenlp.jar -Djava.ext.dirs=lib:liblocal \
 
 `-output pennTrees` specifies that the Stanford CoreNLP output the full
 sentence sentiment analysis. To get an idea of what the format means, take a
-look at [the live demo](http://nlp.stanford.edu:8080/sentiment/rntnDemo.html)
+look at [the live demo](http://nlp.stanford.edu:8080/sentiment/rntnDemo.html).
 Removing that flag will change the output mode to only stating the overall
 sentence tone (very negative, negative, neutral, positive, very positive).
 
@@ -188,8 +187,8 @@ $ java -cp stanford-corenlp.jar -Djava.ext.dirs=lib:liblocal -mx5g \
     -output pennTrees
 ```
 
-`language/substitutions.txt` contains list of word sentiment labels that need
-to be relabeled from the default Stanford CoreNLP Penn Tree output.  Stanford
+[`language/substitutions.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/language/substitutions.txt) contains a list of word sentiment labels that need
+to be relabeled from the default Stanford CoreNLP Penn Tree output. The Stanford
 CoreNLP default model was trained on movie reviews, so it incorrectly labels
 words we find in software development conversation. For example, 'Christian' is
 labeled as positive, since people may leave a review about the positivity of
@@ -198,9 +197,9 @@ name. Since FOSS Heartbeat's model is trained to recognize empathy and praise
 as positive, and personal attacks as negative, we often have to shift the
 sentiment of specific words.
 
-You can use substitutions.txt to change word sentiment labels in the sentences
-from the default sentiment model. It involves stripping the '%' off the vim
-substitution commands in substitution.txt, using the resulting file as a sed
+You can use `substitutions.txt` to change word sentiment labels in the sentences
+from the default sentiment model. It involves stripping the '%' off the Vim
+substitution commands in `substitutions.txt`, using the resulting file as a sed
 regular expression file, and piping the output from the sentiment model into
 sed:
 
@@ -214,7 +213,7 @@ $ cat path/to/foss-heartbeat/language/substitutions.txt | \
 ```
 
 Once this is done, you can feed interesting examples in and put them in
-empathy/train.txt or empathy/dev.txt to retrain FOSS Heartbeat's model. You
+`empathy-model/train.txt` or `empathy-model/dev.txt` to retrain FOSS Heartbeat's model. You
 will need to manually propagate up any sentiment changes from the innermost
 sentence fragments to the root of the sentence. This is something that needs to
 be done by human eyes, since the sentence tone can change when different
@@ -227,20 +226,20 @@ process sentences, we need to drop any inline code that is (most likely) to be
 ranked as neutral, or may be miscategorized because the model hasn't been
 trained on that particular language.
 
-We also convert any unicode emojis into their short-hand codes (as described on
-http://www.webpagefx.com/tools/emoji-cheat-sheet/), which make it easier on
+We also convert any Unicode emojis into their short-hand codes (as described at
+http://www.webpagefx.com/tools/emoji-cheat-sheet/), which makes it easier on
 humans to read analyzed plain-text sentences.
 
-It also takes time for the Stanford CoreNLP to load the models, so it is faster
-to write a bunch of text to a file, and use the -file command line option to
+It also takes time for the Stanford CoreNLP to load the models. It is faster
+to write a bunch of text to a file and use the `-file` command line option to
 parse a file, than to re-run the command for each sentence. Thus, there is a
 FOSS Heartbeat script that generates a scrubbed file of all comments in a repo
 that you can feed to Stanford CoreNLP.
 
-The output file will have the filenames (preceded by a hashmark), and the
+The output file will contain the filenames (preceded by a hashmark) and the
 contents of the scrubbed comments. Sentences may span multiple lines, and the
 Stanford CoreNLP will break them up using its sentence parser. It does mean
-that things like lists or sentence that don't end with punctuation will get
+that things like lists or sentences that don't end with punctuation will get
 joined with the next line.
 
 To generate the scrubbed file, run:
@@ -265,23 +264,23 @@ $ java -cp stanford-corenlp.jar -Djava.ext.dirs=lib:liblocal -mx5g \
 ### Modifying the sentiment training data
 
 In order to retrain the sentiment model, you need to add parsed sentences with
-Penn tree sentiment for each word. You'll need to add about 1 sentence to
-`empathy/dev.txt` for every 8 similar sentences you add to `empathy/train.txt`.
+Penn Tree sentiment for each word. You'll need to add about one sentence to
+`empathy-model/dev.txt` for every eight similar sentences you add to `empathy-model/train.txt`.
 
-Penn tree sentence format initially looks very strange:
+Penn Tree sentence format initially looks very strange:
 
 ```
 (4 (2 Again) (4 (2 this) (4 (4 (2 is) (4 (4 super) (3 (3 great) (2 work)))) (2 .))))
 ```
 
-Each word, and each combined sentence part has an associated sentiment, from 0
-to 4.  In the empathy model, the following categorizations are used:
+Each word, and each combined sentence part, has an associated sentiment from zero
+to four. In the empathy model, the following categorizations are used:
 
  - 4 (Very positive): Thank yous with emphasis (*great* or great!), or specific praise
  - 3 (Positive): Thanks, praise, encouragement, empathy, helping others, and apologies
  - 2 (Neutral): Any talk about code that includes opinions without expressing gratitude, empathy, cursing, or discriminatory language
  - 1 (Negative): Comments about code or people with mild cursing or abelist language
- - 0 (Very Negative): Comments with strong cursing, sexist, racist, homophobic, transphobic, etc language
+ - 0 (Very Negative): Comments with strong cursing, sexist, racist, homophobic, transphobic, etc. language
 
 It can sometimes be easier to see how sentence sentiment changes as its parsed
 phrases are combined, by putting it in a tree format:
@@ -302,15 +301,15 @@ phrases are combined, by putting it in a tree format:
          (2 .))))
 ```
 
-There's a [good visualation tool by the Standford CoreNLP
-developers](http://nlp.stanford.edu:8080/sentiment/rntnDemo.html), but is it not
+There's a [good visualization tool by the Standford CoreNLP
+developers](http://nlp.stanford.edu:8080/sentiment/rntnDemo.html), but it is not
 open source and uses the default sentiment model trained on movie reviews.
 
 #### Vim Tips and Tricks
 
-In order for people to better "see" the sentiment in Penn tree text files, you
-can use [this vim plugin to highlight the sentiment
-labels](http://vim.wikia.com/wiki/Highlight_multiple_words).  You'll need to
+In order for people to better "see" the sentiment in Penn Tree text files, you
+can use [this Vim plugin to highlight the sentiment
+labels](http://vim.wikia.com/wiki/Highlight_multiple_words). You'll need to
 modify the plugins/highlight.csv files to have the following lines:
 
 ```
@@ -320,7 +319,7 @@ modify the plugins/highlight.csv files to have the following lines:
 9,white,DarkBlue,white,DarkSlateBlue
 ```
 
-When you open a Penn tree file, you can run the following commands to highlight
+When you open a Penn Tree file, you can run the following commands to highlight
 sentiment:
 
 ```
@@ -336,5 +335,5 @@ sentiment.
 Additionally, when comparing the sentiment results from two different models,
 it's useful to have vimdiff only highlight the individual words (or in our
 case, the sentiment labels) that have changed, rather than highlighting the
-whole line.  [This vim plugin highlights only changed words when vim is in diff
+whole line. [This Vim plugin highlights only changed words when Vim is in diff
 mode.](https://github.com/rickhowe/diffchar.vim)
