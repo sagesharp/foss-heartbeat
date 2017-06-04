@@ -111,7 +111,7 @@ $ python ghstats.py GITHUB_REPO_NAME GITHUB_OWNER_NAME docs/
 ```
 
 The HTML report will be created in ```docs/GITHUB_OWNER_NAME/GITHUB_REPO_NAME```.
-You will need to hand-edit ```docs/index.html```
+You will need to hand-edit [`docs/index.html`](https://github.com/sarahsharp/foss-heartbeat/blob/master/docs/index.html)
 to link to ```docs/GITHUB_OWNER_NAME/GITHUB_REPO_NAME/foss-heartbeat.html```.
 
 ### (Optional) Train the Stanford CoreNLP sentiment model
@@ -133,7 +133,7 @@ training set is ~8,000 sentences) and a development set that helps you tune
 parameters of the neural net. Both sets have to be sentences that are manually
 turned into Penn Tree format.
 
-You can find FOSS Heartbeat's training set in [`empathy/train.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/train.txt) and its development set in [`empathy/dev.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/dev.txt).
+You can find FOSS Heartbeat's training set in [`empathy-model/train.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/train.txt) and its development set in [`empathy-model/dev.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/empathy-model/dev.txt).
 
 The sentences in the training model are taken from open source projects: LKML,
 Debian-devel mailing list, glibc, AngularJS, .NET, Elm, React, Fsharp, Idris,
@@ -187,7 +187,7 @@ $ java -cp stanford-corenlp.jar -Djava.ext.dirs=lib:liblocal -mx5g \
     -output pennTrees
 ```
 
-`language/substitutions.txt` contains a list of word sentiment labels that need
+[`language/substitutions.txt`](https://github.com/sarahsharp/foss-heartbeat/blob/master/language/substitutions.txt) contains a list of word sentiment labels that need
 to be relabeled from the default Stanford CoreNLP Penn Tree output. The Stanford
 CoreNLP default model was trained on movie reviews, so it incorrectly labels
 words we find in software development conversation. For example, 'Christian' is
@@ -197,9 +197,9 @@ name. Since FOSS Heartbeat's model is trained to recognize empathy and praise
 as positive, and personal attacks as negative, we often have to shift the
 sentiment of specific words.
 
-You can use [substitutions.txt] to change word sentiment labels in the sentences
+You can use `substitutions.txt` to change word sentiment labels in the sentences
 from the default sentiment model. It involves stripping the '%' off the Vim
-substitution commands in `substitution.txt`, using the resulting file as a sed
+substitution commands in `substitutions.txt`, using the resulting file as a sed
 regular expression file, and piping the output from the sentiment model into
 sed:
 
@@ -213,7 +213,7 @@ $ cat path/to/foss-heartbeat/language/substitutions.txt | \
 ```
 
 Once this is done, you can feed interesting examples in and put them in
-empathy/train.txt or empathy/dev.txt to retrain FOSS Heartbeat's model. You
+`empathy-model/train.txt` or `empathy-model/dev.txt` to retrain FOSS Heartbeat's model. You
 will need to manually propagate up any sentiment changes from the innermost
 sentence fragments to the root of the sentence. This is something that needs to
 be done by human eyes, since the sentence tone can change when different
@@ -265,7 +265,7 @@ $ java -cp stanford-corenlp.jar -Djava.ext.dirs=lib:liblocal -mx5g \
 
 In order to retrain the sentiment model, you need to add parsed sentences with
 Penn Tree sentiment for each word. You'll need to add about one sentence to
-`empathy/dev.txt` for every eight similar sentences you add to `empathy/train.txt`.
+`empathy-model/dev.txt` for every eight similar sentences you add to `empathy-model/train.txt`.
 
 Penn Tree sentence format initially looks very strange:
 
